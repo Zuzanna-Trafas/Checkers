@@ -15,12 +15,642 @@
         android:contentDescription="@string/board" />
 
     <ImageView
-        android:id="@+id/Field_0_1"
-        android:src="@drawable/black_pawn"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="55dp"
-        android:layout_marginTop="100dp"
-        android:padding="3dp"
-        android:contentDescription="@string/field"/>
+		android:id="@+id/Field_0_0"
+		android:src="@drawable/empty"
+		android:layout_width="50dp"
+		android:layout_height="50dp"
+		android:layout_marginStart="5dp"
+		android:layout_marginTop="100dp"
+		android:padding="3dp"
+		android:contentDescription="@string/field"/>
+
+	<ImageView
+		android:id="@+id/Field_0_1"
+		android:src="@drawable/empty"
+		android:layout_width="50dp"
+		android:layout_height="50dp"
+		android:layout_marginStart="55dp"
+		android:layout_marginTop="100dp"
+		android:padding="3dp"
+		android:contentDescription="@string/field"/>
+
+	<ImageView
+		android:id="@+id/Field_0_2"
+		android:src="@drawable/empty"
+		android:layout_width="50dp"
+		android:layout_height="50dp"
+		android:layout_marginStart="105dp"
+		android:layout_marginTop="100dp"
+		android:padding="3dp"
+		android:contentDescription="@string/field"/>
+
+	<ImageView
+		android:id="@+id/Field_0_3"
+		android:src="@drawable/empty"
+		android:layout_width="50dp"
+		android:layout_height="50dp"
+		android:layout_marginStart="155dp"
+		android:layout_marginTop="100dp"
+		android:padding="3dp"
+		android:contentDescription="@string/field"/>
+
+	<ImageView
+		android:id="@+id/Field_0_4"
+		android:src="@drawable/empty"
+		android:layout_width="50dp"
+		android:layout_height="50dp"
+		android:layout_marginStart="205dp"
+		android:layout_marginTop="100dp"
+		android:padding="3dp"
+		android:contentDescription="@string/field"/>
+
+	<ImageView
+		android:id="@+id/Field_0_5"
+		android:src="@drawable/empty"
+		android:layout_width="50dp"
+		android:layout_height="50dp"
+		android:layout_marginStart="255dp"
+		android:layout_marginTop="100dp"
+		android:padding="3dp"
+		android:contentDescription="@string/field"/>
+
+	<ImageView
+		android:id="@+id/Field_0_6"
+		android:src="@drawable/empty"
+		android:layout_width="50dp"
+		android:layout_height="50dp"
+		android:layout_marginStart="305dp"
+		android:layout_marginTop="100dp"
+		android:padding="3dp"
+		android:contentDescription="@string/field"/>
+
+	<ImageView
+		android:id="@+id/Field_0_7"
+		android:src="@drawable/empty"
+		android:layout_width="50dp"
+		android:layout_height="50dp"
+		android:layout_marginStart="355dp"
+		android:layout_marginTop="100dp"
+		android:padding="3dp"
+		android:contentDescription="@string/field"/>
+
+	<ImageView
+		android:id="@+id/Field_1_0"
+		android:src="@drawable/empty"
+		android:layout_width="50dp"
+		android:layout_height="50dp"
+		android:layout_marginStart="5dp"
+		android:layout_marginTop="150dp"
+		android:padding="3dp"
+		android:contentDescription="@string/field"/>
+
+	<ImageView
+		android:id="@+id/Field_1_1"
+		android:src="@drawable/empty"
+		android:layout_width="50dp"
+		android:layout_height="50dp"
+		android:layout_marginStart="55dp"
+		android:layout_marginTop="150dp"
+		android:padding="3dp"
+		android:contentDescription="@string/field"/>
+
+	<ImageView
+		android:id="@+id/Field_1_2"
+		android:src="@drawable/empty"
+		android:layout_width="50dp"
+		android:layout_height="50dp"
+		android:layout_marginStart="105dp"
+		android:layout_marginTop="150dp"
+		android:padding="3dp"
+		android:contentDescription="@string/field"/>
+
+	<ImageView
+		android:id="@+id/Field_1_3"
+		android:src="@drawable/empty"
+		android:layout_width="50dp"
+		android:layout_height="50dp"
+		android:layout_marginStart="155dp"
+		android:layout_marginTop="150dp"
+		android:padding="3dp"
+		android:contentDescription="@string/field"/>
+
+	<ImageView
+		android:id="@+id/Field_1_4"
+		android:src="@drawable/empty"
+		android:layout_width="50dp"
+		android:layout_height="50dp"
+		android:layout_marginStart="205dp"
+		android:layout_marginTop="150dp"
+		android:padding="3dp"
+		android:contentDescription="@string/field"/>
+
+	<ImageView
+		android:id="@+id/Field_1_5"
+		android:src="@drawable/empty"
+		android:layout_width="50dp"
+		android:layout_height="50dp"
+		android:layout_marginStart="255dp"
+		android:layout_marginTop="150dp"
+		android:padding="3dp"
+		android:contentDescription="@string/field"/>
+
+	<ImageView
+		android:id="@+id/Field_1_6"
+		android:src="@drawable/empty"
+		android:layout_width="50dp"
+		android:layout_height="50dp"
+		android:layout_marginStart="305dp"
+		android:layout_marginTop="150dp"
+		android:padding="3dp"
+		android:contentDescription="@string/field"/>
+
+	<ImageView
+		android:id="@+id/Field_1_7"
+		android:src="@drawable/empty"
+		android:layout_width="50dp"
+		android:layout_height="50dp"
+		android:layout_marginStart="355dp"
+		android:layout_marginTop="150dp"
+		android:padding="3dp"
+		android:contentDescription="@string/field"/>
+
+	<ImageView
+		android:id="@+id/Field_2_0"
+		android:src="@drawable/empty"
+		android:layout_width="50dp"
+		android:layout_height="50dp"
+		android:layout_marginStart="5dp"
+		android:layout_marginTop="200dp"
+		android:padding="3dp"
+		android:contentDescription="@string/field"/>
+
+	<ImageView
+		android:id="@+id/Field_2_1"
+		android:src="@drawable/empty"
+		android:layout_width="50dp"
+		android:layout_height="50dp"
+		android:layout_marginStart="55dp"
+		android:layout_marginTop="200dp"
+		android:padding="3dp"
+		android:contentDescription="@string/field"/>
+
+	<ImageView
+		android:id="@+id/Field_2_2"
+		android:src="@drawable/empty"
+		android:layout_width="50dp"
+		android:layout_height="50dp"
+		android:layout_marginStart="105dp"
+		android:layout_marginTop="200dp"
+		android:padding="3dp"
+		android:contentDescription="@string/field"/>
+
+	<ImageView
+		android:id="@+id/Field_2_3"
+		android:src="@drawable/empty"
+		android:layout_width="50dp"
+		android:layout_height="50dp"
+		android:layout_marginStart="155dp"
+		android:layout_marginTop="200dp"
+		android:padding="3dp"
+		android:contentDescription="@string/field"/>
+
+	<ImageView
+		android:id="@+id/Field_2_4"
+		android:src="@drawable/empty"
+		android:layout_width="50dp"
+		android:layout_height="50dp"
+		android:layout_marginStart="205dp"
+		android:layout_marginTop="200dp"
+		android:padding="3dp"
+		android:contentDescription="@string/field"/>
+
+	<ImageView
+		android:id="@+id/Field_2_5"
+		android:src="@drawable/empty"
+		android:layout_width="50dp"
+		android:layout_height="50dp"
+		android:layout_marginStart="255dp"
+		android:layout_marginTop="200dp"
+		android:padding="3dp"
+		android:contentDescription="@string/field"/>
+
+	<ImageView
+		android:id="@+id/Field_2_6"
+		android:src="@drawable/empty"
+		android:layout_width="50dp"
+		android:layout_height="50dp"
+		android:layout_marginStart="305dp"
+		android:layout_marginTop="200dp"
+		android:padding="3dp"
+		android:contentDescription="@string/field"/>
+
+	<ImageView
+		android:id="@+id/Field_2_7"
+		android:src="@drawable/empty"
+		android:layout_width="50dp"
+		android:layout_height="50dp"
+		android:layout_marginStart="355dp"
+		android:layout_marginTop="200dp"
+		android:padding="3dp"
+		android:contentDescription="@string/field"/>
+
+	<ImageView
+		android:id="@+id/Field_3_0"
+		android:src="@drawable/empty"
+		android:layout_width="50dp"
+		android:layout_height="50dp"
+		android:layout_marginStart="5dp"
+		android:layout_marginTop="250dp"
+		android:padding="3dp"
+		android:contentDescription="@string/field"/>
+
+	<ImageView
+		android:id="@+id/Field_3_1"
+		android:src="@drawable/empty"
+		android:layout_width="50dp"
+		android:layout_height="50dp"
+		android:layout_marginStart="55dp"
+		android:layout_marginTop="250dp"
+		android:padding="3dp"
+		android:contentDescription="@string/field"/>
+
+	<ImageView
+		android:id="@+id/Field_3_2"
+		android:src="@drawable/empty"
+		android:layout_width="50dp"
+		android:layout_height="50dp"
+		android:layout_marginStart="105dp"
+		android:layout_marginTop="250dp"
+		android:padding="3dp"
+		android:contentDescription="@string/field"/>
+
+	<ImageView
+		android:id="@+id/Field_3_3"
+		android:src="@drawable/empty"
+		android:layout_width="50dp"
+		android:layout_height="50dp"
+		android:layout_marginStart="155dp"
+		android:layout_marginTop="250dp"
+		android:padding="3dp"
+		android:contentDescription="@string/field"/>
+
+	<ImageView
+		android:id="@+id/Field_3_4"
+		android:src="@drawable/empty"
+		android:layout_width="50dp"
+		android:layout_height="50dp"
+		android:layout_marginStart="205dp"
+		android:layout_marginTop="250dp"
+		android:padding="3dp"
+		android:contentDescription="@string/field"/>
+
+	<ImageView
+		android:id="@+id/Field_3_5"
+		android:src="@drawable/empty"
+		android:layout_width="50dp"
+		android:layout_height="50dp"
+		android:layout_marginStart="255dp"
+		android:layout_marginTop="250dp"
+		android:padding="3dp"
+		android:contentDescription="@string/field"/>
+
+	<ImageView
+		android:id="@+id/Field_3_6"
+		android:src="@drawable/empty"
+		android:layout_width="50dp"
+		android:layout_height="50dp"
+		android:layout_marginStart="305dp"
+		android:layout_marginTop="250dp"
+		android:padding="3dp"
+		android:contentDescription="@string/field"/>
+
+	<ImageView
+		android:id="@+id/Field_3_7"
+		android:src="@drawable/empty"
+		android:layout_width="50dp"
+		android:layout_height="50dp"
+		android:layout_marginStart="355dp"
+		android:layout_marginTop="250dp"
+		android:padding="3dp"
+		android:contentDescription="@string/field"/>
+
+	<ImageView
+		android:id="@+id/Field_4_0"
+		android:src="@drawable/empty"
+		android:layout_width="50dp"
+		android:layout_height="50dp"
+		android:layout_marginStart="5dp"
+		android:layout_marginTop="300dp"
+		android:padding="3dp"
+		android:contentDescription="@string/field"/>
+
+	<ImageView
+		android:id="@+id/Field_4_1"
+		android:src="@drawable/empty"
+		android:layout_width="50dp"
+		android:layout_height="50dp"
+		android:layout_marginStart="55dp"
+		android:layout_marginTop="300dp"
+		android:padding="3dp"
+		android:contentDescription="@string/field"/>
+
+	<ImageView
+		android:id="@+id/Field_4_2"
+		android:src="@drawable/empty"
+		android:layout_width="50dp"
+		android:layout_height="50dp"
+		android:layout_marginStart="105dp"
+		android:layout_marginTop="300dp"
+		android:padding="3dp"
+		android:contentDescription="@string/field"/>
+
+	<ImageView
+		android:id="@+id/Field_4_3"
+		android:src="@drawable/empty"
+		android:layout_width="50dp"
+		android:layout_height="50dp"
+		android:layout_marginStart="155dp"
+		android:layout_marginTop="300dp"
+		android:padding="3dp"
+		android:contentDescription="@string/field"/>
+
+	<ImageView
+		android:id="@+id/Field_4_4"
+		android:src="@drawable/empty"
+		android:layout_width="50dp"
+		android:layout_height="50dp"
+		android:layout_marginStart="205dp"
+		android:layout_marginTop="300dp"
+		android:padding="3dp"
+		android:contentDescription="@string/field"/>
+
+	<ImageView
+		android:id="@+id/Field_4_5"
+		android:src="@drawable/empty"
+		android:layout_width="50dp"
+		android:layout_height="50dp"
+		android:layout_marginStart="255dp"
+		android:layout_marginTop="300dp"
+		android:padding="3dp"
+		android:contentDescription="@string/field"/>
+
+	<ImageView
+		android:id="@+id/Field_4_6"
+		android:src="@drawable/empty"
+		android:layout_width="50dp"
+		android:layout_height="50dp"
+		android:layout_marginStart="305dp"
+		android:layout_marginTop="300dp"
+		android:padding="3dp"
+		android:contentDescription="@string/field"/>
+
+	<ImageView
+		android:id="@+id/Field_4_7"
+		android:src="@drawable/empty"
+		android:layout_width="50dp"
+		android:layout_height="50dp"
+		android:layout_marginStart="355dp"
+		android:layout_marginTop="300dp"
+		android:padding="3dp"
+		android:contentDescription="@string/field"/>
+
+	<ImageView
+		android:id="@+id/Field_5_0"
+		android:src="@drawable/empty"
+		android:layout_width="50dp"
+		android:layout_height="50dp"
+		android:layout_marginStart="5dp"
+		android:layout_marginTop="350dp"
+		android:padding="3dp"
+		android:contentDescription="@string/field"/>
+
+	<ImageView
+		android:id="@+id/Field_5_1"
+		android:src="@drawable/empty"
+		android:layout_width="50dp"
+		android:layout_height="50dp"
+		android:layout_marginStart="55dp"
+		android:layout_marginTop="350dp"
+		android:padding="3dp"
+		android:contentDescription="@string/field"/>
+
+	<ImageView
+		android:id="@+id/Field_5_2"
+		android:src="@drawable/empty"
+		android:layout_width="50dp"
+		android:layout_height="50dp"
+		android:layout_marginStart="105dp"
+		android:layout_marginTop="350dp"
+		android:padding="3dp"
+		android:contentDescription="@string/field"/>
+
+	<ImageView
+		android:id="@+id/Field_5_3"
+		android:src="@drawable/empty"
+		android:layout_width="50dp"
+		android:layout_height="50dp"
+		android:layout_marginStart="155dp"
+		android:layout_marginTop="350dp"
+		android:padding="3dp"
+		android:contentDescription="@string/field"/>
+
+	<ImageView
+		android:id="@+id/Field_5_4"
+		android:src="@drawable/empty"
+		android:layout_width="50dp"
+		android:layout_height="50dp"
+		android:layout_marginStart="205dp"
+		android:layout_marginTop="350dp"
+		android:padding="3dp"
+		android:contentDescription="@string/field"/>
+
+	<ImageView
+		android:id="@+id/Field_5_5"
+		android:src="@drawable/empty"
+		android:layout_width="50dp"
+		android:layout_height="50dp"
+		android:layout_marginStart="255dp"
+		android:layout_marginTop="350dp"
+		android:padding="3dp"
+		android:contentDescription="@string/field"/>
+
+	<ImageView
+		android:id="@+id/Field_5_6"
+		android:src="@drawable/empty"
+		android:layout_width="50dp"
+		android:layout_height="50dp"
+		android:layout_marginStart="305dp"
+		android:layout_marginTop="350dp"
+		android:padding="3dp"
+		android:contentDescription="@string/field"/>
+
+	<ImageView
+		android:id="@+id/Field_5_7"
+		android:src="@drawable/empty"
+		android:layout_width="50dp"
+		android:layout_height="50dp"
+		android:layout_marginStart="355dp"
+		android:layout_marginTop="350dp"
+		android:padding="3dp"
+		android:contentDescription="@string/field"/>
+
+	<ImageView
+		android:id="@+id/Field_6_0"
+		android:src="@drawable/empty"
+		android:layout_width="50dp"
+		android:layout_height="50dp"
+		android:layout_marginStart="5dp"
+		android:layout_marginTop="400dp"
+		android:padding="3dp"
+		android:contentDescription="@string/field"/>
+
+	<ImageView
+		android:id="@+id/Field_6_1"
+		android:src="@drawable/empty"
+		android:layout_width="50dp"
+		android:layout_height="50dp"
+		android:layout_marginStart="55dp"
+		android:layout_marginTop="400dp"
+		android:padding="3dp"
+		android:contentDescription="@string/field"/>
+
+	<ImageView
+		android:id="@+id/Field_6_2"
+		android:src="@drawable/empty"
+		android:layout_width="50dp"
+		android:layout_height="50dp"
+		android:layout_marginStart="105dp"
+		android:layout_marginTop="400dp"
+		android:padding="3dp"
+		android:contentDescription="@string/field"/>
+
+	<ImageView
+		android:id="@+id/Field_6_3"
+		android:src="@drawable/empty"
+		android:layout_width="50dp"
+		android:layout_height="50dp"
+		android:layout_marginStart="155dp"
+		android:layout_marginTop="400dp"
+		android:padding="3dp"
+		android:contentDescription="@string/field"/>
+
+	<ImageView
+		android:id="@+id/Field_6_4"
+		android:src="@drawable/empty"
+		android:layout_width="50dp"
+		android:layout_height="50dp"
+		android:layout_marginStart="205dp"
+		android:layout_marginTop="400dp"
+		android:padding="3dp"
+		android:contentDescription="@string/field"/>
+
+	<ImageView
+		android:id="@+id/Field_6_5"
+		android:src="@drawable/empty"
+		android:layout_width="50dp"
+		android:layout_height="50dp"
+		android:layout_marginStart="255dp"
+		android:layout_marginTop="400dp"
+		android:padding="3dp"
+		android:contentDescription="@string/field"/>
+
+	<ImageView
+		android:id="@+id/Field_6_6"
+		android:src="@drawable/empty"
+		android:layout_width="50dp"
+		android:layout_height="50dp"
+		android:layout_marginStart="305dp"
+		android:layout_marginTop="400dp"
+		android:padding="3dp"
+		android:contentDescription="@string/field"/>
+
+	<ImageView
+		android:id="@+id/Field_6_7"
+		android:src="@drawable/empty"
+		android:layout_width="50dp"
+		android:layout_height="50dp"
+		android:layout_marginStart="355dp"
+		android:layout_marginTop="400dp"
+		android:padding="3dp"
+		android:contentDescription="@string/field"/>
+
+	<ImageView
+		android:id="@+id/Field_7_0"
+		android:src="@drawable/empty"
+		android:layout_width="50dp"
+		android:layout_height="50dp"
+		android:layout_marginStart="5dp"
+		android:layout_marginTop="450dp"
+		android:padding="3dp"
+		android:contentDescription="@string/field"/>
+
+	<ImageView
+		android:id="@+id/Field_7_1"
+		android:src="@drawable/empty"
+		android:layout_width="50dp"
+		android:layout_height="50dp"
+		android:layout_marginStart="55dp"
+		android:layout_marginTop="450dp"
+		android:padding="3dp"
+		android:contentDescription="@string/field"/>
+
+	<ImageView
+		android:id="@+id/Field_7_2"
+		android:src="@drawable/empty"
+		android:layout_width="50dp"
+		android:layout_height="50dp"
+		android:layout_marginStart="105dp"
+		android:layout_marginTop="450dp"
+		android:padding="3dp"
+		android:contentDescription="@string/field"/>
+
+	<ImageView
+		android:id="@+id/Field_7_3"
+		android:src="@drawable/empty"
+		android:layout_width="50dp"
+		android:layout_height="50dp"
+		android:layout_marginStart="155dp"
+		android:layout_marginTop="450dp"
+		android:padding="3dp"
+		android:contentDescription="@string/field"/>
+
+	<ImageView
+		android:id="@+id/Field_7_4"
+		android:src="@drawable/empty"
+		android:layout_width="50dp"
+		android:layout_height="50dp"
+		android:layout_marginStart="205dp"
+		android:layout_marginTop="450dp"
+		android:padding="3dp"
+		android:contentDescription="@string/field"/>
+
+	<ImageView
+		android:id="@+id/Field_7_5"
+		android:src="@drawable/empty"
+		android:layout_width="50dp"
+		android:layout_height="50dp"
+		android:layout_marginStart="255dp"
+		android:layout_marginTop="450dp"
+		android:padding="3dp"
+		android:contentDescription="@string/field"/>
+
+	<ImageView
+		android:id="@+id/Field_7_6"
+		android:src="@drawable/empty"
+		android:layout_width="50dp"
+		android:layout_height="50dp"
+		android:layout_marginStart="305dp"
+		android:layout_marginTop="450dp"
+		android:padding="3dp"
+		android:contentDescription="@string/field"/>
+
+	<ImageView
+		android:id="@+id/Field_7_7"
+		android:src="@drawable/empty"
+		android:layout_width="50dp"
+		android:layout_height="50dp"
+		android:layout_marginStart="355dp"
+		android:layout_marginTop="450dp"
+		android:padding="3dp"
+		android:contentDescription="@string/field"/>
 </FrameLayout>

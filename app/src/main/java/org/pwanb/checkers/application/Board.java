@@ -1,17 +1,92 @@
 package org.pwanb.checkers.application;
 
-public class Board {
+import android.app.Activity;
+import android.widget.ImageView;
+import android.view.View;
+import android.graphics.drawable.Drawable;
+import android.support.v7.widget.AppCompatImageView;
 
-    private color[][] boardState = new color[8][8];  //our board
+class Board extends MainActivity{
+    private PawnGraphics pawnGraphics;
+    private Pair chosenField;
+    private Field[][] board = new Field[8][8];
+    private Activity activity;
 
+    class Field implements AppCompatImageView.OnClickListener {
 
-    public enum color {
-        BLACK,
-        BLACK_PROMOTED,
-        WHITE,
-        WHITE_PROMOTED,
-        EMPTY
+        private ImageView image;
+        private int X;
+        private int Y;
+
+        Field(int x, int y, ImageView img) {
+            X = x;
+            Y = y;
+            image = img;
+            image.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            int prevX = chosenField.getX();
+            int prevY = chosenField.getY();
+            System.out.println(X + "" + Y);
+            if (chosenField.isSet()) {
+                if (X != prevX || Y != prevY) {
+
+                    board[prevX][prevY].deleteHighlight();
+                    this.setHighlight();
+                    chosenField.set(X, Y);
+                } else {
+                    this.deleteHighlight();
+                    chosenField.unset();
+                }
+            } else {
+                this.setHighlight();
+                chosenField.set(X, Y);
+            }
+        }
+
+        void deleteHighlight() {
+            image.setBackground(null);
+        }
+
+        void setHighlight() {
+            Drawable highlight = activity.getResources().getDrawable(R.drawable.highlight);
+            image.setBackground(highlight);
+        }
+
+        void setImage(final int imageID) {
+            image.setImageResource(imageID);
+        }
     }
 
+    Board(ImageView[][] boardMain, Activity activity) {
+        chosenField = new Pair();
+        pawnGraphics = new PawnGraphics();
+        this.activity = activity;
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                board[i][j] = new Field(i, j, boardMain[i][j]);
+            }
+        }
+        this.start();
+    }
 
+    private void start() {
+        for (int i = 0; i < 8; i += 2) {
+            board[i][0].setImage(pawnGraphics.getWHITE_PAWN());
+            board[i + 1][1].setImage(pawnGraphics.getWHITE_PAWN());
+            board[i][2].setImage(pawnGraphics.getWHITE_PAWN());
+            board[i + 1][5].setImage(pawnGraphics.getBLACK_PAWN());
+            board[i][6].setImage(pawnGraphics.getBLACK_PAWN());
+            board[i + 1][7].setImage(pawnGraphics.getBLACK_PAWN());
+        }
+    }
 }
+
+
+
+
+
+
+

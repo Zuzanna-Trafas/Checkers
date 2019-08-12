@@ -1,6 +1,6 @@
 package org.pwanb.checkers.application;
 
-public final class Pair {
+final class Pair {
     private boolean set;
     private int X;
     private int Y;

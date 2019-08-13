@@ -26,4 +26,10 @@ final class Pair {
     void unset(){ set = false; }
 
     boolean isSet(){ return set; }
+
+    boolean isEqual(Pair other){
+        if (other.X == this.X && other.Y == this.Y)
+            return true;
+        return false;
+    }
 }

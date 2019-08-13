@@ -6,8 +6,7 @@ import android.view.View;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.AppCompatImageView;
 
-class Board extends MainActivity{
-    private PawnGraphics pawnGraphics;
+class Board{
     private Pair chosenField;
     private Field[][] board = new Field[8][8];
     private Activity activity;
@@ -62,7 +61,6 @@ class Board extends MainActivity{
 
     Board(ImageView[][] boardMain, Activity activity) {
         chosenField = new Pair();
-        pawnGraphics = new PawnGraphics();
         this.activity = activity;
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
@@ -74,12 +72,12 @@ class Board extends MainActivity{
 
     private void start() {
         for (int i = 0; i < 8; i += 2) {
-            board[i][0].setImage(pawnGraphics.getWHITE_PAWN());
-            board[i + 1][1].setImage(pawnGraphics.getWHITE_PAWN());
-            board[i][2].setImage(pawnGraphics.getWHITE_PAWN());
-            board[i + 1][5].setImage(pawnGraphics.getBLACK_PAWN());
-            board[i][6].setImage(pawnGraphics.getBLACK_PAWN());
-            board[i + 1][7].setImage(pawnGraphics.getBLACK_PAWN());
+            board[i][0].setImage(PawnGraphics.WHITE_PAWN.get());
+            board[i + 1][1].setImage(PawnGraphics.WHITE_PAWN.get());
+            board[i][2].setImage(PawnGraphics.WHITE_PAWN.get());
+            board[i + 1][5].setImage(PawnGraphics.BLACK_PAWN.get());
+            board[i][6].setImage(PawnGraphics.BLACK_PAWN.get());
+            board[i + 1][7].setImage(PawnGraphics.BLACK_PAWN.get());
         }
     }
 }

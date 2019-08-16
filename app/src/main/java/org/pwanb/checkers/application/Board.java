@@ -193,9 +193,6 @@ class Board{
                 }
             }
         }
-        if(empty) {
-            //TODO stop game
-        }
     }
 
     private void updateMoveBlack(){
@@ -233,9 +230,63 @@ class Board{
                 }
             }
         }
+    }
+
+    boolean updateAttackWhite(){
+        boolean empty = true;
+        boolean isPossible = false;
+        for (int i =0; i<12; i++)
+        {
+            if(white[i] != null){
+                empty = false;
+                int x = white[i].getCurrentPosition().getX();
+                int y = white[i].getCurrentPosition().getY();
+                int itr = 0;
+                board[x][y].pawn.setMoveOption();
+                white[i].setMoveOption();
+                if (white[i].isKing())
+                {
+                    //TODO king move
+                }
+                else
+                {
+
+                }
+            }
+        }
         if(empty) {
             //TODO stop game
         }
+        return isPossible;
+    }
+
+    boolean updateAttackBlack(){
+        boolean empty = true;
+        boolean isPossible = false;
+
+        for (int i =0; i<12; i++)
+        {
+            if(black[i] != null){
+                empty = false;
+                int x = black[i].getCurrentPosition().getX();
+                int y = black[i].getCurrentPosition().getY();
+                int itr = 0;
+                board[x][y].pawn.setMoveOption();
+                black[i].setMoveOption();
+                if (black[i].isKing())
+                {
+                    //TODO king move
+                }
+                else
+                {
+
+                }
+            }
+        }
+        if(empty) {
+            //TODO stop game
+        }
+        return isPossible;
     }
 
     private void move(Pawn pawn, Pair destination){

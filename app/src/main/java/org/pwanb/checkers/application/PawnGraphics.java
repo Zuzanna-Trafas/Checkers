@@ -28,6 +28,4 @@ enum PawnGraphics {
                 return BLACK_PAWN.graphic;
         }
     }
-
-
 }

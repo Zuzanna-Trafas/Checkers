@@ -154,12 +154,12 @@ class Board{
 
     private void possibleMoves(){
         if(whiteTurn)
-            updateWhite();
+            updateMoveWhite();
         else
-            updateBlack();
+            updateMoveBlack();
     }
 
-    private void updateWhite(){
+    private void updateMoveWhite(){
         boolean empty = true;
 
         for (int i =0; i<12; i++)
@@ -179,45 +179,16 @@ class Board{
                 {
                     if(y < 7)
                     {
-                        if(x<7) {
-                            if(board[x+1][y+1].pawn == null)
-                            {
-
-                                white[i].setPossibleMove(itr, new Pair(x+1,y+1));
-                                board[x][y].pawn.setPossibleMove(itr, new Pair(x+1,y+1));
-                                itr++;
-                            }
-                            else{
-                                //TODO attack option
-                                // wyslc do innej listy o wyzszym priorytecie
-                            }
-                        }
-                        if(x > 0){
-                            if(board[x-1][y+1].pawn == null)
-                            {
-                                white[i].setPossibleMove(itr, new Pair(x-1,y+1));
-                                board[x][y].pawn.setPossibleMove(itr, new Pair(x-1,y+1));
-                            }
-                            else{
-                                //TODO attack option
-                                // wyslc do innej listy o wyzszym priorytecie
-                            }
-                        }
-                    }
-
-                    if(y > 0)
-                    {
-                        if(x<7 && board[x+1][y-1].pawn != null && board[x+1][y-1].pawn.isWhite() != whiteTurn) {
-
-                                //TODO attack option
-                                // wyslc do innej listy o wyzszym priorytecie
-                        }
-                        if(x>0 && board[x-1][y-1].pawn != null && board[x-1][y-1].pawn.isWhite() != whiteTurn) {
-
-                            //TODO attack option
-                            // wyslc do innej listy o wyzszym priorytecie
+                        if(x<7 && board[x+1][y+1].pawn == null) {
+                            white[i].setPossibleMove(itr, new Pair(x+1,y+1));
+                            board[x][y].pawn.setPossibleMove(itr, new Pair(x+1,y+1));
+                            itr++;
                         }
 
+                        if(x > 0 && board[x-1][y+1].pawn == null){
+                            white[i].setPossibleMove(itr, new Pair(x-1,y+1));
+                            board[x][y].pawn.setPossibleMove(itr, new Pair(x-1,y+1));
+                        }
                     }
                 }
             }
@@ -227,7 +198,7 @@ class Board{
         }
     }
 
-    private void updateBlack(){
+    private void updateMoveBlack(){
         boolean empty = true;
 
         for (int i =0; i<12; i++)
@@ -247,45 +218,17 @@ class Board{
                 {
                     if(y > 0)
                     {
-                        if(x<7) {
-                            if(board[x+1][y-1].pawn == null)
-                            {
+                        if(x<7 && board[x+1][y-1].pawn == null) {
+                            black[i].setPossibleMove(itr, new Pair(x+1,y-1));
+                            board[x][y].pawn.setPossibleMove(itr, new Pair(x+1,y-1));
+                            itr++;
 
-                                black[i].setPossibleMove(itr, new Pair(x+1,y-1));
-                                board[x][y].pawn.setPossibleMove(itr, new Pair(x+1,y-1));
-                                itr++;
-                            }
-                            else{
-                                //TODO attack option
-                                // wyslc do innej listy o wyzszym priorytecie
-                            }
                         }
-                        if(x > 0){
-                            if(board[x-1][y-1].pawn == null)
-                            {
-                                black[i].setPossibleMove(itr, new Pair(x-1,y-1));
-                                board[x][y].pawn.setPossibleMove(itr, new Pair(x-1,y-1));
-                            }
-                            else{
-                                //TODO attack option
-                                // wyslc do innej listy o wyzszym priorytecie
-                            }
+                        if(x > 0 && board[x-1][y-1].pawn == null){
+                            black[i].setPossibleMove(itr, new Pair(x-1,y-1));
+                            board[x][y].pawn.setPossibleMove(itr, new Pair(x-1,y-1));
+
                         }
-                    }
-
-                    if(y < 7)
-                    {
-                        if(x<7 && board[x+1][y+1].pawn != null && board[x+1][y+1].pawn.isWhite() != whiteTurn) {
-
-                            //TODO attack option
-                            // wyslc do innej listy o wyzszym priorytecie
-                        }
-                        if(x>0 && board[x-1][y+1].pawn != null && board[x-1][y+1].pawn.isWhite() != whiteTurn) {
-
-                            //TODO attack option
-                            // wyslc do innej listy o wyzszym priorytecie
-                        }
-
                     }
                 }
             }

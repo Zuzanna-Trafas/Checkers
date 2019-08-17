@@ -13,7 +13,7 @@ class Board{
     private Activity activity;
     private Pawn[] white = new Pawn[12];
     private Pawn[] black = new Pawn[12];
-    boolean isAttack;
+    private boolean isAttack;
 
     class Field implements AppCompatImageView.OnClickListener {
 
@@ -87,8 +87,6 @@ class Board{
         private void moveSecondClick() {
             int prevX = chosenField.getX();
             int prevY = chosenField.getY();
-            int X = position.getX();
-            int Y = position.getY();
             for (int i = 0; i < board[prevX][prevY].pawn.getMoveOption(); i++)
             {
                 if (board[prevX][prevY].pawn.getPossibleMove()[i].isEqual(position)){

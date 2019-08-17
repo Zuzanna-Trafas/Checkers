@@ -13,6 +13,7 @@ class Board{
     private Activity activity;
     private Pawn[] white = new Pawn[12];
     private Pawn[] black = new Pawn[12];
+    boolean isAttack;
 
     class Field implements AppCompatImageView.OnClickListener {
 
@@ -46,14 +47,18 @@ class Board{
 
         @Override
         public void onClick(View v) {
-            if (pawn != null)
-                firstClick();
-            else if (chosenField.isSet())
-                secondClick();
+            if (isAttack) {
 
+
+            } else {
+                if (pawn != null)
+                    moveFirstClick();
+                else if (chosenField.isSet())
+                    moveSecondClick();
+            }
         }
 
-        private void firstClick() {
+        private void moveFirstClick() {
             int prevX = chosenField.getX();
             int prevY = chosenField.getY();
             int X = position.getX();
@@ -79,7 +84,7 @@ class Board{
             }
         }
 
-        private void secondClick() {
+        private void moveSecondClick() {
             int prevX = chosenField.getX();
             int prevY = chosenField.getY();
             int X = position.getX();
@@ -153,19 +158,25 @@ class Board{
     }
 
     private void possibleMoves(){
-        if(whiteTurn)
-            updateMoveWhite();
-        else
-            updateMoveBlack();
+        if(whiteTurn) {
+            isAttack = updateAttackWhite();
+            if(isAttack)
+                showAttack();
+            else
+                updateMoveWhite();}
+        else {
+            isAttack = updateAttackBlack();
+            if(isAttack)
+                showAttack();
+            else
+                updateMoveBlack();
+        }
     }
 
     private void updateMoveWhite(){
-        boolean empty = true;
-
         for (int i =0; i<12; i++)
         {
             if(white[i] != null){
-                empty = false;
                 int x = white[i].getCurrentPosition().getX();
                 int y = white[i].getCurrentPosition().getY();
                 int itr = 0;
@@ -196,12 +207,9 @@ class Board{
     }
 
     private void updateMoveBlack(){
-        boolean empty = true;
-
         for (int i =0; i<12; i++)
         {
             if(black[i] != null){
-                empty = false;
                 int x = black[i].getCurrentPosition().getX();
                 int y = black[i].getCurrentPosition().getY();
                 int itr = 0;
@@ -232,7 +240,7 @@ class Board{
         }
     }
 
-    boolean updateAttackWhite(){
+    private boolean updateAttackWhite(){
         boolean empty = true;
         boolean isPossible = false;
         for (int i =0; i<12; i++)
@@ -260,7 +268,7 @@ class Board{
         return isPossible;
     }
 
-    boolean updateAttackBlack(){
+    private boolean updateAttackBlack(){
         boolean empty = true;
         boolean isPossible = false;
 
@@ -289,6 +297,10 @@ class Board{
         return isPossible;
     }
 
+    private void showAttack(){
+
+    }
+
     private void move(Pawn pawn, Pair destination){
         int x = pawn.getCurrentPosition().getX();
         int y = pawn.getCurrentPosition().getY();
@@ -309,8 +321,6 @@ class Board{
         board[x][y].deleteOption();
         board[x][y].deleteHighlight();
         board[x][y].deletePawn();
-
-
     }
 
     private int idxOfPawn(Pawn[] pawns, Pair position)
@@ -319,7 +329,6 @@ class Board{
         {
             if(pawns[i]!= null && position.isEqual(pawns[i].getCurrentPosition()))
                 return i;
-
         }
         return -1;
     }

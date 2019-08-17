@@ -47,14 +47,18 @@ class Board{
 
         @Override
         public void onClick(View v) {
-            if (pawn != null)
-                firstClick();
-            else if (chosenField.isSet())
-                secondClick();
+            if (isAttack) {
 
+
+            } else {
+                if (pawn != null)
+                    moveFirstClick();
+                else if (chosenField.isSet())
+                    moveSecondClick();
+            }
         }
 
-        private void firstClick() {
+        private void moveFirstClick() {
             int prevX = chosenField.getX();
             int prevY = chosenField.getY();
             int X = position.getX();
@@ -80,7 +84,7 @@ class Board{
             }
         }
 
-        private void secondClick() {
+        private void moveSecondClick() {
             int prevX = chosenField.getX();
             int prevY = chosenField.getY();
             int X = position.getX();
@@ -156,11 +160,15 @@ class Board{
     private void possibleMoves(){
         if(whiteTurn) {
             isAttack = updateAttackWhite();
-            if(!isAttack)
+            if(isAttack)
+                showAttack();
+            else
                 updateMoveWhite();}
         else {
             isAttack = updateAttackBlack();
-            if(!isAttack)
+            if(isAttack)
+                showAttack();
+            else
                 updateMoveBlack();
         }
     }
@@ -287,6 +295,10 @@ class Board{
             //TODO stop game
         }
         return isPossible;
+    }
+
+    private void showAttack(){
+
     }
 
     private void move(Pawn pawn, Pair destination){

@@ -13,6 +13,7 @@ class Board{
     private Activity activity;
     private Pawn[] white = new Pawn[12];
     private Pawn[] black = new Pawn[12];
+    boolean isAttack;
 
     class Field implements AppCompatImageView.OnClickListener {
 
@@ -153,15 +154,14 @@ class Board{
     }
 
     private void possibleMoves(){
-        boolean isAttack;
         if(whiteTurn) {
             isAttack = updateAttackWhite();
             if(!isAttack)
                 updateMoveWhite();}
         else {
-            isAttack = updateAttackWhite();
+            isAttack = updateAttackBlack();
             if(!isAttack)
-                updateMoveWhite();
+                updateMoveBlack();
         }
     }
 
@@ -232,7 +232,7 @@ class Board{
         }
     }
 
-    boolean updateAttackWhite(){
+    private boolean updateAttackWhite(){
         boolean empty = true;
         boolean isPossible = false;
         for (int i =0; i<12; i++)
@@ -260,7 +260,7 @@ class Board{
         return isPossible;
     }
 
-    boolean updateAttackBlack(){
+    private boolean updateAttackBlack(){
         boolean empty = true;
         boolean isPossible = false;
 

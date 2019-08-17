@@ -1,11 +1,12 @@
 package org.pwanb.checkers.application;
 
-class Pawn {
+class Pawn implements Comparable<Pawn>{
     private boolean king;
     private boolean white;
     private Pair currentPosition;
     private int moveOption;
     private Pair[] possibleMove;
+
 
     Pawn(int x, int y, boolean white) {
         king = false;
@@ -25,6 +26,11 @@ class Pawn {
     void setPossibleMove(int itr, Pair possibleMove) {
         this.possibleMove[itr] = possibleMove;
         moveOption = itr + 1;
+    }
+
+    @Override
+    public int compareTo(Pawn other) {
+        return this.moveOption - other.moveOption;
     }
 
     Pair[] getPossibleMove() { return possibleMove; }

@@ -6,6 +6,8 @@ import android.view.View;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.AppCompatImageView;
 
+import java.util.PriorityQueue;
+
 class Board{
     private boolean whiteTurn;
     private Pair chosenField;
@@ -13,7 +15,7 @@ class Board{
     private Activity activity;
     private Pawn[] white = new Pawn[12];
     private Pawn[] black = new Pawn[12];
-    private boolean isAttack;
+    private PriorityQueue<Pawn> attack = new PriorityQueue<>();
 
     class Field implements AppCompatImageView.OnClickListener {
 
@@ -47,9 +49,11 @@ class Board{
 
         @Override
         public void onClick(View v) {
-            if (isAttack) {
-
-
+            if (attack.size() > 0) {
+                if (pawn != null)
+                    attackFirstClick();
+                else if (chosenField.isSet())
+                    attackSecondClick();
             } else {
                 if (pawn != null)
                     moveFirstClick();
@@ -97,6 +101,13 @@ class Board{
                     break;
                 }
             }
+        }
+        private void attackFirstClick(){
+
+        }
+
+        private void attackSecondClick(){
+
         }
 
         void showOption(){
@@ -157,15 +168,15 @@ class Board{
 
     private void possibleMoves(){
         if(whiteTurn) {
-            isAttack = updateAttackWhite();
-            if(isAttack)
-                showAttack();
+            updateAttackWhite();
+            if(attack.size() > 0)
+                showAttackOption();
             else
                 updateMoveWhite();}
         else {
-            isAttack = updateAttackBlack();
-            if(isAttack)
-                showAttack();
+            updateAttackBlack();
+            if(attack.size() > 0)
+                showAttackOption();
             else
                 updateMoveBlack();
         }
@@ -238,9 +249,8 @@ class Board{
         }
     }
 
-    private boolean updateAttackWhite(){
+    private void updateAttackWhite(){
         boolean empty = true;
-        boolean isPossible = false;
         for (int i =0; i<12; i++)
         {
             if(white[i] != null){
@@ -263,13 +273,10 @@ class Board{
         if(empty) {
             //TODO stop game
         }
-        return isPossible;
     }
 
-    private boolean updateAttackBlack(){
+    private void updateAttackBlack(){
         boolean empty = true;
-        boolean isPossible = false;
-
         for (int i =0; i<12; i++)
         {
             if(black[i] != null){
@@ -292,11 +299,17 @@ class Board{
         if(empty) {
             //TODO stop game
         }
-        return isPossible;
     }
 
-    private void showAttack(){
-
+    private void showAttackOption(){
+        Pawn option;
+        int x, y;
+        do {
+        option = attack.poll();
+        x = option.getCurrentPosition().getX();
+        y = option.getCurrentPosition().getY();
+        board[x][y].setHighlight();
+    }while(option == attack.peek());
     }
 
     private void move(Pawn pawn, Pair destination){

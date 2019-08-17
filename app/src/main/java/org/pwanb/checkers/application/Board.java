@@ -153,19 +153,22 @@ class Board{
     }
 
     private void possibleMoves(){
-        if(whiteTurn)
-            updateMoveWhite();
-        else
-            updateMoveBlack();
+        boolean isAttack;
+        if(whiteTurn) {
+            isAttack = updateAttackWhite();
+            if(!isAttack)
+                updateMoveWhite();}
+        else {
+            isAttack = updateAttackWhite();
+            if(!isAttack)
+                updateMoveWhite();
+        }
     }
 
     private void updateMoveWhite(){
-        boolean empty = true;
-
         for (int i =0; i<12; i++)
         {
             if(white[i] != null){
-                empty = false;
                 int x = white[i].getCurrentPosition().getX();
                 int y = white[i].getCurrentPosition().getY();
                 int itr = 0;
@@ -196,12 +199,9 @@ class Board{
     }
 
     private void updateMoveBlack(){
-        boolean empty = true;
-
         for (int i =0; i<12; i++)
         {
             if(black[i] != null){
-                empty = false;
                 int x = black[i].getCurrentPosition().getX();
                 int y = black[i].getCurrentPosition().getY();
                 int itr = 0;
@@ -309,8 +309,6 @@ class Board{
         board[x][y].deleteOption();
         board[x][y].deleteHighlight();
         board[x][y].deletePawn();
-
-
     }
 
     private int idxOfPawn(Pawn[] pawns, Pair position)
@@ -319,7 +317,6 @@ class Board{
         {
             if(pawns[i]!= null && position.isEqual(pawns[i].getCurrentPosition()))
                 return i;
-
         }
         return -1;
     }

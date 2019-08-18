@@ -6,6 +6,10 @@ import android.view.View;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.AppCompatImageView;
 
+import java.util.LinkedList;
+import java.util.PriorityQueue;
+import java.util.Queue;
+
 class Board{
     private boolean whiteTurn;
     private Pair chosenField;
@@ -13,7 +17,9 @@ class Board{
     private Activity activity;
     private Pawn[] white = new Pawn[12];
     private Pawn[] black = new Pawn[12];
-    private boolean isAttack;
+    private PriorityQueue<Pawn> attack = new PriorityQueue<>();
+    private Queue<Pair> highlights = new LinkedList<>();
+
 
     class Field implements AppCompatImageView.OnClickListener {
 
@@ -30,6 +36,7 @@ class Board{
         void setHighlight() {
             Drawable highlight = activity.getResources().getDrawable(R.drawable.highlight);
             image.setBackground(highlight);
+            highlights.add(new Pair (position.getX(),position.getY()));
         }
 
         void deleteHighlight() { image.setBackground(null); }
@@ -47,9 +54,11 @@ class Board{
 
         @Override
         public void onClick(View v) {
-            if (isAttack) {
-
-
+            if (attack.size() > 0) {
+                if (pawn != null)
+                    attackFirstClick();
+                else if (chosenField.isSet())
+                    attackSecondClick();
             } else {
                 if (pawn != null)
                     moveFirstClick();
@@ -66,14 +75,12 @@ class Board{
             if (pawn.isWhite() == whiteTurn) {
                 if (chosenField.isSet()) {
                     if (X != prevX || Y != prevY) {
-                        board[prevX][prevY].deleteHighlight();
-                        board[prevX][prevY].deleteOption();
+                        deleteHighlight();
                         setHighlight();
                         chosenField.set(X, Y);
                         showOption();
                     } else {
                         deleteHighlight();
-                        deleteOption();
                         chosenField.unset();
                     }
                 } else {
@@ -98,6 +105,13 @@ class Board{
                 }
             }
         }
+        private void attackFirstClick(){
+
+        }
+
+        private void attackSecondClick(){
+
+        }
 
         void showOption(){
             int x;
@@ -109,18 +123,6 @@ class Board{
                 board[x][y].setHighlight();
             }
         }
-
-        void deleteOption(){
-            int x;
-            int y;
-            for(int i = 0 ; i< pawn.getMoveOption(); i++)
-            {
-                x = pawn.getPossibleMove()[i].getX();
-                y = pawn.getPossibleMove()[i].getY();
-                board[x][y].deleteHighlight();
-            }
-        }
-
     }
 
 
@@ -157,15 +159,15 @@ class Board{
 
     private void possibleMoves(){
         if(whiteTurn) {
-            isAttack = updateAttackWhite();
-            if(isAttack)
-                showAttack();
+            updateAttackWhite();
+            if(attack.size() > 0)
+                showAttackOption();
             else
                 updateMoveWhite();}
         else {
-            isAttack = updateAttackBlack();
-            if(isAttack)
-                showAttack();
+            updateAttackBlack();
+            if(attack.size() > 0)
+                showAttackOption();
             else
                 updateMoveBlack();
         }
@@ -238,9 +240,8 @@ class Board{
         }
     }
 
-    private boolean updateAttackWhite(){
+    private void updateAttackWhite(){
         boolean empty = true;
-        boolean isPossible = false;
         for (int i =0; i<12; i++)
         {
             if(white[i] != null){
@@ -263,13 +264,10 @@ class Board{
         if(empty) {
             //TODO stop game
         }
-        return isPossible;
     }
 
-    private boolean updateAttackBlack(){
+    private void updateAttackBlack(){
         boolean empty = true;
-        boolean isPossible = false;
-
         for (int i =0; i<12; i++)
         {
             if(black[i] != null){
@@ -292,12 +290,40 @@ class Board{
         if(empty) {
             //TODO stop game
         }
-        return isPossible;
     }
 
-    private void showAttack(){
+    private void showAttackOption(){
+        Pawn option;
+        int x, y, field;
+        Queue<Integer> fields;
+        do {
+        option = attack.poll();
+        x = option.getCurrentPosition().getX();
+        y = option.getCurrentPosition().getY();
+        board[x][y].setHighlight();
+        fields = option.getLongestQueue();
+        do {
+            field = fields.poll();
+            x = option.getPossibleAttack(field).peek().getX();
+            y = option.getPossibleAttack(field).peek().getY();
+            board[x][y].setHighlight();
+        }while(fields.peek() != null);
+    }while(option == attack.peek());
+    }
+
+
+    private void deleteHighlight(){
+        Pair highlight;
+        int x, y;
+        do {
+            highlight = highlights.poll();
+            x = highlight.getX();
+            y = highlight.getY();
+            board[x][y].deleteHighlight();
+        }while(highlights.peek() != null);
 
     }
+
 
     private void move(Pawn pawn, Pair destination){
         int x = pawn.getCurrentPosition().getX();
@@ -316,9 +342,21 @@ class Board{
             int idx = idxOfPawn(black, pawn.getCurrentPosition());
             black[idx].setCurrentPosition(destination);
         }
-        board[x][y].deleteOption();
-        board[x][y].deleteHighlight();
+        deleteHighlight();
         board[x][y].deletePawn();
+    }
+
+    private void deletePawn(Pawn pawn){
+        int x = pawn.getCurrentPosition().getX();
+        int y = pawn.getCurrentPosition().getY();
+        board[x][y].deletePawn();
+        if(whiteTurn) {
+            int idx = idxOfPawn(black, pawn.getCurrentPosition());
+            black[idx] = null;
+        }else{
+            int idx = idxOfPawn(white, pawn.getCurrentPosition());
+            white[idx]= null;
+        }
     }
 
     private int idxOfPawn(Pawn[] pawns, Pair position)

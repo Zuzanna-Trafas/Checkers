@@ -6,7 +6,9 @@ import android.view.View;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.AppCompatImageView;
 
+import java.util.LinkedList;
 import java.util.PriorityQueue;
+import java.util.Queue;
 
 class Board{
     private boolean whiteTurn;
@@ -16,6 +18,8 @@ class Board{
     private Pawn[] white = new Pawn[12];
     private Pawn[] black = new Pawn[12];
     private PriorityQueue<Pawn> attack = new PriorityQueue<>();
+    private Queue<Pair> highlights = new LinkedList<>();
+
 
     class Field implements AppCompatImageView.OnClickListener {
 
@@ -303,14 +307,38 @@ class Board{
 
     private void showAttackOption(){
         Pawn option;
-        int x, y;
+        int x, y, field;
+        Queue<Integer> fields;
         do {
         option = attack.poll();
         x = option.getCurrentPosition().getX();
         y = option.getCurrentPosition().getY();
         board[x][y].setHighlight();
+        fields = option.getLongestQueue();
+        highlights.add(new Pair (x,y));
+        do {
+            field = fields.poll();
+            x = option.getPossibleAttack(field).peek().getX();
+            y = option.getPossibleAttack(field).peek().getY();
+            board[x][y].setHighlight();
+            highlights.add(new Pair (x,y));
+        }while(fields.peek() != null);
     }while(option == attack.peek());
     }
+
+
+    private void deleteAttackOption(){
+        Pair highlight;
+        int x, y;
+        do {
+            highlight = highlights.poll();
+            x = highlight.getX();
+            y = highlight.getY();
+
+        }while(highlights.peek() != null);
+
+    }
+
 
     private void move(Pawn pawn, Pair destination){
         int x = pawn.getCurrentPosition().getX();
@@ -332,6 +360,19 @@ class Board{
         board[x][y].deleteOption();
         board[x][y].deleteHighlight();
         board[x][y].deletePawn();
+    }
+
+    private void deletePawn(Pawn pawn){
+        int x = pawn.getCurrentPosition().getX();
+        int y = pawn.getCurrentPosition().getY();
+        board[x][y].deletePawn();
+        if(whiteTurn) {
+            int idx = idxOfPawn(black, pawn.getCurrentPosition());
+            black[idx] = null;
+        }else{
+            int idx = idxOfPawn(white, pawn.getCurrentPosition());
+            white[idx]= null;
+        }
     }
 
     private int idxOfPawn(Pawn[] pawns, Pair position)

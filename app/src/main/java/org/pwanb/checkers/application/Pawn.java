@@ -1,10 +1,14 @@
 package org.pwanb.checkers.application;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 class Pawn implements Comparable<Pawn>{
     private boolean king;
     private boolean white;
-    private Pair currentPosition;
     private int moveOption;
+    private Pair currentPosition;
+    private Queue<Pair>[] possibleAttack;
     private Pair[] possibleMove;
 
 
@@ -13,25 +17,21 @@ class Pawn implements Comparable<Pawn>{
         this.white = white;
         currentPosition = new Pair(x, y);
         possibleMove = new Pair[13];
+        for(int i = 0; i < 4; i++)
+            possibleAttack[i] = new LinkedList<>();
     }
 
     Pawn(Pawn oldPawn) {
         white = oldPawn.white;
         king = oldPawn.king;
-        moveOption = oldPawn.moveOption;
         currentPosition = new Pair(oldPawn.currentPosition.getX(), oldPawn.currentPosition.getY());
         possibleMove = new Pair[13];
-    }
-
-    void setPossibleMove(int itr, Pair possibleMove) {
-        this.possibleMove[itr] = possibleMove;
-        moveOption = itr + 1;
+        for(int i = 0; i < 4; i++)
+            possibleAttack[i] = new LinkedList<>();
     }
 
     @Override
-    public int compareTo(Pawn other) {
-        return this.moveOption - other.moveOption;
-    }
+    public int compareTo(Pawn other) { return this.moveOption - other.moveOption; }
 
     Pair[] getPossibleMove() { return possibleMove; }
 
@@ -39,13 +39,46 @@ class Pawn implements Comparable<Pawn>{
 
     Pair getCurrentPosition() { return currentPosition; }
 
+    Queue<Integer> getLongestQueue(){
+        Queue<Integer> List = new LinkedList<>();
+        int length, maxSize = -1;
+        for(int i = 0; i< 4; i++)
+        {
+            length = possibleAttack[i].size();
+            if (length > 0 ){
+                if(length > maxSize){
+                    List.clear();
+                    List.add(i);
+                    maxSize = length;
+                } else if(length == maxSize){
+                    List.add(i);
+                }
+            }
+        }
+        return List;
+    }
+
+    Queue<Pair> getPossibleAttack(int i) {
+        return possibleAttack[i];
+    }
+
     boolean isKing() { return king; }
 
-    void setKing() { this.king = true; }
-
     boolean isWhite() { return white; }
+
+    void setPossibleMove(int itr, Pair possibleMove) {
+        this.possibleMove[itr] = possibleMove;
+        moveOption = itr + 1;
+    }
+
+    void setKing() { this.king = true; }
 
     void setCurrentPosition(Pair currentPosition) { this.currentPosition = currentPosition; }
 
     void setMoveOption(){ moveOption = 0;}
+
+    void setEmptyQueue(){
+        for(int i = 0; i < 4; i++)
+            possibleAttack[i].clear();
+    }
 }

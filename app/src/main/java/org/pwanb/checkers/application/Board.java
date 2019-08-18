@@ -36,6 +36,7 @@ class Board{
         void setHighlight() {
             Drawable highlight = activity.getResources().getDrawable(R.drawable.highlight);
             image.setBackground(highlight);
+            highlights.add(new Pair (position.getX(),position.getY()));
         }
 
         void deleteHighlight() { image.setBackground(null); }
@@ -74,14 +75,12 @@ class Board{
             if (pawn.isWhite() == whiteTurn) {
                 if (chosenField.isSet()) {
                     if (X != prevX || Y != prevY) {
-                        board[prevX][prevY].deleteHighlight();
-                        board[prevX][prevY].deleteOption();
+                        deleteHighlight();
                         setHighlight();
                         chosenField.set(X, Y);
                         showOption();
                     } else {
                         deleteHighlight();
-                        deleteOption();
                         chosenField.unset();
                     }
                 } else {
@@ -124,18 +123,6 @@ class Board{
                 board[x][y].setHighlight();
             }
         }
-
-        void deleteOption(){
-            int x;
-            int y;
-            for(int i = 0 ; i< pawn.getMoveOption(); i++)
-            {
-                x = pawn.getPossibleMove()[i].getX();
-                y = pawn.getPossibleMove()[i].getY();
-                board[x][y].deleteHighlight();
-            }
-        }
-
     }
 
 
@@ -315,26 +302,24 @@ class Board{
         y = option.getCurrentPosition().getY();
         board[x][y].setHighlight();
         fields = option.getLongestQueue();
-        highlights.add(new Pair (x,y));
         do {
             field = fields.poll();
             x = option.getPossibleAttack(field).peek().getX();
             y = option.getPossibleAttack(field).peek().getY();
             board[x][y].setHighlight();
-            highlights.add(new Pair (x,y));
         }while(fields.peek() != null);
     }while(option == attack.peek());
     }
 
 
-    private void deleteAttackOption(){
+    private void deleteHighlight(){
         Pair highlight;
         int x, y;
         do {
             highlight = highlights.poll();
             x = highlight.getX();
             y = highlight.getY();
-
+            board[x][y].deleteHighlight();
         }while(highlights.peek() != null);
 
     }
@@ -357,8 +342,7 @@ class Board{
             int idx = idxOfPawn(black, pawn.getCurrentPosition());
             black[idx].setCurrentPosition(destination);
         }
-        board[x][y].deleteOption();
-        board[x][y].deleteHighlight();
+        deleteHighlight();
         board[x][y].deletePawn();
     }
 

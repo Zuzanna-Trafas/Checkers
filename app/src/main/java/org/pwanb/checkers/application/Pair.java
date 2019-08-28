@@ -30,9 +30,15 @@ final class Pair {
 
     boolean isSet(){ return set; }
 
-    boolean isEqual(Pair other){
-        if (other.X == this.X && other.Y == this.Y)
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
             return true;
-        return false;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Pair pawn = (Pair) o;
+        return ((Pair) o).X == X && ((Pair) o).Y == Y ;
     }
 }

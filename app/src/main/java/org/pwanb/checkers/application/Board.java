@@ -96,7 +96,7 @@ class Board{
             int prevY = chosenField.getY();
             for (int i = 0; i < board[prevX][prevY].pawn.getMoveOption(); i++)
             {
-                if (board[prevX][prevY].pawn.getPossibleMove()[i].isEqual(position)){
+                if (board[prevX][prevY].pawn.getPossibleMove()[i].equals(position)){
                     move(board[prevX][prevY].pawn, position);
                     chosenField.unset();
                     whiteTurn = !whiteTurn;
@@ -118,6 +118,8 @@ class Board{
         }
 
         private void attackFirstClick(){
+            if(attack.contains(pawn))
+                System.out.println("ELO");
 
         }
 
@@ -178,7 +180,7 @@ class Board{
             else
                 updateMoveWhite();}
         else {
-            //updateAttackBlack();
+            updateAttackBlack();
             if(attack.size() > 0)
                 showAttackOption();
             else
@@ -255,13 +257,13 @@ class Board{
 
     private void updateAttackWhite(){
         boolean empty = true;
+        int priority = 0;
         for (int i =0; i<12; i++)
         {
             if(white[i] != null){
                 empty = false;
-               int x = white[i].getCurrentPosition().getX();
-               int y = white[i].getCurrentPosition().getY();
-
+                int x = white[i].getCurrentPosition().getX();
+                int y = white[i].getCurrentPosition().getY();
                 white[i].setMoveOption();
                 if (white[i].isKing())
                 {
@@ -270,8 +272,11 @@ class Board{
                 else
                 {
                     System.out.println(i);
-                    white[i].setPossibleAttack(possibleAttack(white[i].getCurrentPosition()));
+                    priority = white[i].setPossibleAttack(possibleAttack(white[i].getCurrentPosition()));
                     board[x][y].pawn = new Pawn (white[i]);
+                    if(priority > 1){
+                        attack.add(white[i]);
+                    }
                 }
             }
         }
@@ -282,13 +287,13 @@ class Board{
 
     private void updateAttackBlack(){
         boolean empty = true;
+        int priority  =0;
         for (int i =0; i<12; i++)
         {
             if(black[i] != null){
                 empty = false;
                 int x = black[i].getCurrentPosition().getX();
                 int y = black[i].getCurrentPosition().getY();
-                int itr = 0;
                 board[x][y].pawn.setMoveOption();
                 black[i].setMoveOption();
                 if (black[i].isKing())
@@ -297,8 +302,12 @@ class Board{
                 }
                 else
                 {
-                    black[i].setPossibleAttack(possibleAttack(black[i].getCurrentPosition()));
+                    System.out.println(i);
+                    priority = black[i].setPossibleAttack(possibleAttack(black[i].getCurrentPosition()));
                     board[x][y].pawn = new Pawn (black[i]);
+                    if(priority > 1) {
+                        attack.add(black[i]);
+                    }
                 }
             }
         }
@@ -376,21 +385,16 @@ class Board{
 
     private void showAttackOption(){
         Pawn option;
-        int x, y, field;
-        Queue<Integer> fields;
+        int x, y;
+        PriorityQueue<Pawn> newAttack = new PriorityQueue<>();
         do {
         option = attack.poll();
         x = option.getCurrentPosition().getX();
         y = option.getCurrentPosition().getY();
         board[x][y].setHighlight();
-        fields = option.getLongestQueue();
-        do {
-            field = fields.poll();
-            x = option.getPossibleAttack(field).get(0).getX();
-            y = option.getPossibleAttack(field).get(0).getY();
-            board[x][y].setHighlight();
-        }while(fields.peek() != null);
+        newAttack.add(option);
     }while(option == attack.peek());
+        attack = newAttack;
     }
 
     private void move(Pawn pawn, Pair destination){
@@ -431,7 +435,7 @@ class Board{
     {
         for(int i = 0; i< 12; i++)
         {
-            if(pawns[i]!= null && position.isEqual(pawns[i].getCurrentPosition()))
+            if(pawns[i]!= null && position.equals(pawns[i].getCurrentPosition()))
                 return i;
         }
         return -1;

@@ -2,7 +2,6 @@ package org.pwanb.checkers.application;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 
 class Pawn implements Comparable<Pawn>{
     private boolean king;
@@ -37,31 +36,23 @@ class Pawn implements Comparable<Pawn>{
     @Override
     public int compareTo(Pawn other) { return this.moveOption - other.moveOption; }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Pawn pawn = (Pawn) o;
+        return ((Pawn) o).currentPosition.equals(currentPosition);
+    }
 
     Pair[] getPossibleMove() { return possibleMove; }
 
     int getMoveOption() { return moveOption; }
 
     Pair getCurrentPosition() { return currentPosition; }
-
-    Queue<Integer> getLongestQueue(){
-        Queue<Integer> List = new LinkedList<>();
-        int length, maxSize = -1;
-        for(int i = 0; i< 4; i++)
-        {
-            length = possibleAttack.get(i).size();
-            if (length > 0 ){
-                if(length > maxSize){
-                    List.clear();
-                    List.add(i);
-                    maxSize = length;
-                } else if(length == maxSize){
-                    List.add(i);
-                }
-            }
-        }
-        return List;
-    }
 
     List<Pair> getPossibleAttack(int i) {  return possibleAttack.get(i);  }
 
@@ -80,10 +71,12 @@ class Pawn implements Comparable<Pawn>{
 
     void setMoveOption(){ moveOption = 0;}
 
-    void setPossibleAttack(LinkedList<LinkedList<Pair>> possibleAttack){
+    int setPossibleAttack(LinkedList<LinkedList<Pair>> possibleAttack){
         setEmptyQueue();
+        moveOption = possibleAttack.get(0).size();
         for(int i = 0; i < possibleAttack.size(); i++)
             this.possibleAttack.set(i, new LinkedList<>(possibleAttack.get(i)));
+        return moveOption;
     }
 
     void setEmptyQueue(){

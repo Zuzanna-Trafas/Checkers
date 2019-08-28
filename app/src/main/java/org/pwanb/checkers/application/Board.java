@@ -272,7 +272,7 @@ class Board{
                 else
                 {
                     System.out.println(i);
-                    priority = white[i].setPossibleAttack(possibleAttack(white[i].getCurrentPosition()));
+                    priority = white[i].setPossibleAttack(possibleAttack(white[i].getCurrentPosition(),new LinkedList<Pair>()));
                     board[x][y].pawn = new Pawn (white[i]);
                     if(priority > 1){
                         attack.add(white[i]);
@@ -303,7 +303,7 @@ class Board{
                 else
                 {
                     System.out.println(i);
-                    priority = black[i].setPossibleAttack(possibleAttack(black[i].getCurrentPosition()));
+                    priority = black[i].setPossibleAttack(possibleAttack(black[i].getCurrentPosition(), new LinkedList<Pair>()));
                     board[x][y].pawn = new Pawn (black[i]);
                     if(priority > 1) {
                         attack.add(black[i]);
@@ -316,21 +316,24 @@ class Board{
         }
     }
 
-    private LinkedList<LinkedList<Pair>> possibleAttack(Pair pawn){
+    private LinkedList<LinkedList<Pair>> possibleAttack(Pair pawn, LinkedList<Pair> deleted){
         int x = pawn.getX();
         int y = pawn.getY();
         LinkedList<LinkedList<Pair>> help,outPossibleAttack = null;
         if(y < 6)
         {
             if(x <6 && board[x+1][y+1].pawn != null && board[x+1][y+1].pawn.isWhite() != whiteTurn
-                    && board[x+2][y+2].pawn == null) {
-                outPossibleAttack = possibleAttack(new Pair(x+2, y+2));
-
+                    && board[x+2][y+2].pawn == null && !deleted.contains(new Pair(x+1,y+1))) {
+                deleted.addLast(new Pair(x+1,y+1));
+                outPossibleAttack = possibleAttack(new Pair(x+2, y+2), deleted);
+                deleted.removeLast();
             }
 
             if(x >1 && board[x-1][y+1].pawn != null && board[x-1][y+1].pawn.isWhite() != whiteTurn
-                    &&  board[x-2][y+2].pawn == null){
-                help = possibleAttack(new Pair(x-2, y+2));
+                    &&  board[x-2][y+2].pawn == null && !deleted.contains(new Pair(x-1,y+1))){
+                deleted.addLast(new Pair(x-1,y+1));
+                help = possibleAttack(new Pair(x-2, y+2), deleted);
+                deleted.removeLast();
                 if(outPossibleAttack != null){
                     if(outPossibleAttack.get(0).size() == help.get(0).size()){
                         outPossibleAttack.addAll(help);
@@ -345,8 +348,10 @@ class Board{
 
         if(y > 1){
             if(x >1 && board[x-1][y-1].pawn != null && board[x-1][y-1].pawn.isWhite() != whiteTurn
-                    &&  board[x-2][y-2].pawn == null){
-                help = possibleAttack(new Pair(x-2, y-2));
+                    &&  board[x-2][y-2].pawn == null && !deleted.contains(new Pair(x-1,y-1))){
+                deleted.addLast(new Pair(x-1,y-1));
+                help = possibleAttack(new Pair(x-2, y-2),deleted);
+                deleted.removeLast();
                 if(outPossibleAttack != null){
                     if(outPossibleAttack.get(0).size() == help.get(0).size()){
                         outPossibleAttack.addAll(help);
@@ -359,8 +364,10 @@ class Board{
             }
 
             if(x <6 && board[x+1][y-1].pawn != null && board[x+1][y-1].pawn.isWhite() != whiteTurn
-                    &&  board[x+2][y-2].pawn == null) {
-                help = possibleAttack(new Pair(x+2, y-2));
+                    &&  board[x+2][y-2].pawn == null&& !deleted.contains(new Pair(x+1,y-1))) {
+                deleted.addLast(new Pair(x+1,y-1));
+                help = possibleAttack(new Pair(x+2, y-2),deleted);
+                deleted.removeLast();
                 if(outPossibleAttack != null){
                     if(outPossibleAttack.get(0).size() == help.get(0).size()){
                         outPossibleAttack.addAll(help);

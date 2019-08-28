@@ -13,6 +13,9 @@ final class Pair {
         Y = y;
     }
 
+    @Override public String toString() {
+        return X + " " + Y;
+    }
     int getX() { return X; }
 
     int getY() { return Y; }

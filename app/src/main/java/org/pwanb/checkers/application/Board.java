@@ -100,17 +100,10 @@ class Board{
                     move(board[prevX][prevY].pawn, position);
                     chosenField.unset();
                     whiteTurn = !whiteTurn;
-                    possibleMoves();
+                    possibleAction();
                     break;
                 }
             }
-        }
-        private void attackFirstClick(){
-
-        }
-
-        private void attackSecondClick(){
-
         }
 
         void showOption(){
@@ -123,6 +116,15 @@ class Board{
                 board[x][y].setHighlight();
             }
         }
+
+        private void attackFirstClick(){
+
+        }
+
+        private void attackSecondClick(){
+
+        }
+
     }
 
 
@@ -136,6 +138,17 @@ class Board{
             }
         }
         this.start();
+    }
+
+    private void deleteHighlightBoard(){
+        Pair highlight;
+        int x, y;
+        do {
+            highlight = highlights.poll();
+            x = highlight.getX();
+            y = highlight.getY();
+            board[x][y].deleteHighlightField();
+        }while(highlights.peek() != null);
     }
 
     private void start() {
@@ -154,10 +167,10 @@ class Board{
             black[3*i+1]= new Pawn(board[2*i][6].pawn);
             black[3*i+2]= new Pawn(board[2*i+1][7].pawn);
         }
-        this.possibleMoves();
+        this.possibleAction();
     }
 
-    private void possibleMoves(){
+    private void possibleAction(){
         if(whiteTurn) {
             updateAttackWhite();
             if(attack.size() > 0)
@@ -165,7 +178,7 @@ class Board{
             else
                 updateMoveWhite();}
         else {
-            updateAttackBlack();
+            //updateAttackBlack();
             if(attack.size() > 0)
                 showAttackOption();
             else
@@ -246,10 +259,9 @@ class Board{
         {
             if(white[i] != null){
                 empty = false;
-                int x = white[i].getCurrentPosition().getX();
-                int y = white[i].getCurrentPosition().getY();
-                int itr = 0;
-                board[x][y].pawn.setMoveOption();
+               int x = white[i].getCurrentPosition().getX();
+               int y = white[i].getCurrentPosition().getY();
+
                 white[i].setMoveOption();
                 if (white[i].isKing())
                 {
@@ -257,7 +269,9 @@ class Board{
                 }
                 else
                 {
-
+                    System.out.println(i);
+                    white[i].setPossibleAttack(possibleAttack(white[i].getCurrentPosition()));
+                    board[x][y].pawn = new Pawn (white[i]);
                 }
             }
         }
@@ -283,13 +297,81 @@ class Board{
                 }
                 else
                 {
-
+                    black[i].setPossibleAttack(possibleAttack(black[i].getCurrentPosition()));
+                    board[x][y].pawn = new Pawn (black[i]);
                 }
             }
         }
         if(empty) {
             //TODO stop game
         }
+    }
+
+    private LinkedList<LinkedList<Pair>> possibleAttack(Pair pawn){
+        int x = pawn.getX();
+        int y = pawn.getY();
+        LinkedList<LinkedList<Pair>> help,outPossibleAttack = null;
+        if(y < 6)
+        {
+            if(x <6 && board[x+1][y+1].pawn != null && board[x+1][y+1].pawn.isWhite() != whiteTurn
+                    && board[x+2][y+2].pawn == null) {
+                outPossibleAttack = possibleAttack(new Pair(x+2, y+2));
+
+            }
+
+            if(x >1 && board[x-1][y+1].pawn != null && board[x-1][y+1].pawn.isWhite() != whiteTurn
+                    &&  board[x-2][y+2].pawn == null){
+                help = possibleAttack(new Pair(x-2, y+2));
+                if(outPossibleAttack != null){
+                    if(outPossibleAttack.get(0).size() == help.get(0).size()){
+                        outPossibleAttack.addAll(help);
+                    }else if (outPossibleAttack.get(0).size() < help.get(0).size()){
+                        outPossibleAttack = help;
+                    }
+                }else{
+                    outPossibleAttack = help;
+                }
+            }
+        }
+
+        if(y > 1){
+            if(x >1 && board[x-1][y-1].pawn != null && board[x-1][y-1].pawn.isWhite() != whiteTurn
+                    &&  board[x-2][y-2].pawn == null){
+                help = possibleAttack(new Pair(x-2, y-2));
+                if(outPossibleAttack != null){
+                    if(outPossibleAttack.get(0).size() == help.get(0).size()){
+                        outPossibleAttack.addAll(help);
+                    }else if (outPossibleAttack.get(0).size() < help.get(0).size()){
+                        outPossibleAttack = help;
+                    }
+                }else{
+                    outPossibleAttack = help;
+                }
+            }
+
+            if(x <6 && board[x+1][y-1].pawn != null && board[x+1][y-1].pawn.isWhite() != whiteTurn
+                    &&  board[x+2][y-2].pawn == null) {
+                help = possibleAttack(new Pair(x+2, y-2));
+                if(outPossibleAttack != null){
+                    if(outPossibleAttack.get(0).size() == help.get(0).size()){
+                        outPossibleAttack.addAll(help);
+                    }else if (outPossibleAttack.get(0).size() < help.get(0).size()){
+                        outPossibleAttack = help;
+                    }
+                }else{
+                    outPossibleAttack = help;
+                }
+            }
+
+        }
+        if (outPossibleAttack == null){
+            outPossibleAttack = new LinkedList<>();
+            outPossibleAttack.add(new LinkedList<Pair>());
+        }
+        for (int i = 0; i<outPossibleAttack.size(); i++)
+            outPossibleAttack.get(i).addFirst(pawn);
+        System.out.println(outPossibleAttack);
+        return outPossibleAttack;
     }
 
     private void showAttackOption(){
@@ -304,26 +386,12 @@ class Board{
         fields = option.getLongestQueue();
         do {
             field = fields.poll();
-            x = option.getPossibleAttack(field).peek().getX();
-            y = option.getPossibleAttack(field).peek().getY();
+            x = option.getPossibleAttack(field).get(0).getX();
+            y = option.getPossibleAttack(field).get(0).getY();
             board[x][y].setHighlight();
         }while(fields.peek() != null);
     }while(option == attack.peek());
     }
-
-
-    private void deleteHighlightBoard(){
-        Pair highlight;
-        int x, y;
-        do {
-            highlight = highlights.poll();
-            x = highlight.getX();
-            y = highlight.getY();
-            board[x][y].deleteHighlightField();
-        }while(highlights.peek() != null);
-
-    }
-
 
     private void move(Pawn pawn, Pair destination){
         int x = pawn.getCurrentPosition().getX();
@@ -369,10 +437,3 @@ class Board{
         return -1;
     }
 }
-
-
-
-
-
-
-

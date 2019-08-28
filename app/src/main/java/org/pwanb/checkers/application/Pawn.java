@@ -1,6 +1,5 @@
 package org.pwanb.checkers.application;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -10,7 +9,7 @@ class Pawn implements Comparable<Pawn>{
     private boolean white;
     private int moveOption;
     private Pair currentPosition;
-    private List<Queue<Pair>> possibleAttack = new ArrayList<>();
+    private LinkedList<LinkedList<Pair>> possibleAttack = new LinkedList<>();
     private Pair[] possibleMove;
 
 
@@ -19,8 +18,10 @@ class Pawn implements Comparable<Pawn>{
         this.white = white;
         currentPosition = new Pair(x, y);
         possibleMove = new Pair[13];
-        for(int i = 0; i < 4; i++)
+        for(int i = 0; i < 4; i++) {
             possibleAttack.add(new LinkedList<Pair>());
+
+        }
     }
 
     Pawn(Pawn oldPawn) {
@@ -30,11 +31,12 @@ class Pawn implements Comparable<Pawn>{
         currentPosition = new Pair(oldPawn.currentPosition.getX(), oldPawn.currentPosition.getY());
         possibleMove = new Pair[13];
         for(int i = 0; i < 4; i++)
-            possibleAttack.add(new LinkedList<Pair>());
+            possibleAttack.add(new LinkedList<>(oldPawn.possibleAttack.get(i)));
     }
 
     @Override
     public int compareTo(Pawn other) { return this.moveOption - other.moveOption; }
+
 
     Pair[] getPossibleMove() { return possibleMove; }
 
@@ -61,7 +63,7 @@ class Pawn implements Comparable<Pawn>{
         return List;
     }
 
-    Queue<Pair> getPossibleAttack(int i) {  return possibleAttack.get(i);  }
+    List<Pair> getPossibleAttack(int i) {  return possibleAttack.get(i);  }
 
     boolean isKing() { return king; }
 
@@ -78,8 +80,15 @@ class Pawn implements Comparable<Pawn>{
 
     void setMoveOption(){ moveOption = 0;}
 
+    void setPossibleAttack(LinkedList<LinkedList<Pair>> possibleAttack){
+        setEmptyQueue();
+        for(int i = 0; i < possibleAttack.size(); i++)
+            this.possibleAttack.set(i, new LinkedList<>(possibleAttack.get(i)));
+    }
+
     void setEmptyQueue(){
-        for(int i = 0; i < 4; i++)
+        for(int i = 0; i < possibleAttack.size(); i++)
             possibleAttack.get(i).clear();
     }
+
 }

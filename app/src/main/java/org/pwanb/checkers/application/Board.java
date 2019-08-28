@@ -33,8 +33,14 @@ class Board{
             image.setOnClickListener(this);
         }
 
-        void setHighlight() {
-            Drawable highlight = activity.getResources().getDrawable(R.drawable.highlight);
+        void setHighlightOrange() {
+            Drawable highlight = activity.getResources().getDrawable(R.drawable.highlight_organe);
+            image.setBackground(highlight);
+            highlights.add(new Pair (position.getX(),position.getY()));
+        }
+
+        void setHighlightRed() {
+            Drawable highlight = activity.getResources().getDrawable(R.drawable.highlight_red);
             image.setBackground(highlight);
             highlights.add(new Pair (position.getX(),position.getY()));
         }
@@ -76,7 +82,7 @@ class Board{
                 if (chosenField.isSet()) {
                     if (X != prevX || Y != prevY) {
                         deleteHighlightBoard();
-                        setHighlight();
+                        setHighlightOrange();
                         chosenField.set(X, Y);
                         showOption();
                     } else {
@@ -84,7 +90,7 @@ class Board{
                         chosenField.unset();
                     }
                 } else {
-                    setHighlight();
+                    setHighlightOrange();
                     chosenField.set(X, Y);
                     showOption();
                 }
@@ -113,7 +119,7 @@ class Board{
             {
                 x = pawn.getPossibleMove()[i].getX();
                 y = pawn.getPossibleMove()[i].getY();
-                board[x][y].setHighlight();
+                board[x][y].setHighlightOrange();
             }
         }
 
@@ -398,7 +404,7 @@ class Board{
         option = attack.poll();
         x = option.getCurrentPosition().getX();
         y = option.getCurrentPosition().getY();
-        board[x][y].setHighlight();
+        board[x][y].setHighlightRed();
         newAttack.add(option);
     }while(option == attack.peek());
         attack = newAttack;

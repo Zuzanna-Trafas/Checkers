@@ -39,7 +39,7 @@ class Board{
             highlights.add(new Pair (position.getX(),position.getY()));
         }
 
-        void deleteHighlight() { image.setBackground(null); }
+        void deleteHighlightField() { image.setBackground(null); }
 
         void setPawn(final int x, final int y, final boolean white,final int imageID ) {
             this.pawn = new Pawn(x, y, white);
@@ -75,12 +75,12 @@ class Board{
             if (pawn.isWhite() == whiteTurn) {
                 if (chosenField.isSet()) {
                     if (X != prevX || Y != prevY) {
-                        deleteHighlight();
+                        deleteHighlightBoard();
                         setHighlight();
                         chosenField.set(X, Y);
                         showOption();
                     } else {
-                        deleteHighlight();
+                        deleteHighlightBoard();
                         chosenField.unset();
                     }
                 } else {
@@ -312,14 +312,14 @@ class Board{
     }
 
 
-    private void deleteHighlight(){
+    private void deleteHighlightBoard(){
         Pair highlight;
         int x, y;
         do {
             highlight = highlights.poll();
             x = highlight.getX();
             y = highlight.getY();
-            board[x][y].deleteHighlight();
+            board[x][y].deleteHighlightField();
         }while(highlights.peek() != null);
 
     }
@@ -342,7 +342,7 @@ class Board{
             int idx = idxOfPawn(black, pawn.getCurrentPosition());
             black[idx].setCurrentPosition(destination);
         }
-        deleteHighlight();
+        deleteHighlightBoard();
         board[x][y].deletePawn();
     }
 

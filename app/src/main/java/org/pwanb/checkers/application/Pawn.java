@@ -26,6 +26,7 @@ class Pawn implements Comparable<Pawn>{
     Pawn(Pawn oldPawn) {
         white = oldPawn.white;
         king = oldPawn.king;
+        moveOption = oldPawn.moveOption;
         currentPosition = new Pair(oldPawn.currentPosition.getX(), oldPawn.currentPosition.getY());
         possibleMove = new Pair[13];
         for(int i = 0; i < 4; i++)
@@ -60,9 +61,7 @@ class Pawn implements Comparable<Pawn>{
         return List;
     }
 
-    Queue<Pair> getPossibleAttack(int i) {
-        return possibleAttack.get(i);
-    }
+    Queue<Pair> getPossibleAttack(int i) {  return possibleAttack.get(i);  }
 
     boolean isKing() { return king; }
 

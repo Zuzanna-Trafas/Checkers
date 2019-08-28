@@ -38,7 +38,6 @@ final class Pair {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        Pair pawn = (Pair) o;
         return ((Pair) o).X == X && ((Pair) o).Y == Y ;
     }
 }

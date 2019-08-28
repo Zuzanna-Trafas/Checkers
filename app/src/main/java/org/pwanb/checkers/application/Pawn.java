@@ -1,7 +1,6 @@
 package org.pwanb.checkers.application;
 
 import java.util.LinkedList;
-import java.util.List;
 
 class Pawn implements Comparable<Pawn>{
     private boolean king;
@@ -44,7 +43,6 @@ class Pawn implements Comparable<Pawn>{
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        Pawn pawn = (Pawn) o;
         return ((Pawn) o).currentPosition.equals(currentPosition);
     }
 
@@ -53,8 +51,6 @@ class Pawn implements Comparable<Pawn>{
     int getMoveOption() { return moveOption; }
 
     Pair getCurrentPosition() { return currentPosition; }
-
-    List<Pair> getPossibleAttack(int i) {  return possibleAttack.get(i);  }
 
     boolean isKing() { return king; }
 
@@ -79,7 +75,7 @@ class Pawn implements Comparable<Pawn>{
         return moveOption;
     }
 
-    void setEmptyQueue(){
+    private void setEmptyQueue(){
         for(int i = 0; i < possibleAttack.size(); i++)
             possibleAttack.get(i).clear();
     }

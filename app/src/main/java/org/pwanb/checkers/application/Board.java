@@ -57,7 +57,6 @@ class Board{
             image.setImageResource(PawnGraphics.EMPTY.get());
         }
 
-
         @Override
         public void onClick(View v) {
             if (attack.size() > 0) {
@@ -132,7 +131,6 @@ class Board{
         private void attackSecondClick(){
 
         }
-
     }
 
 
@@ -151,12 +149,12 @@ class Board{
     private void deleteHighlightBoard(){
         Pair highlight;
         int x, y;
-        do {
+        while(highlights.peek() != null){
             highlight = highlights.poll();
             x = highlight.getX();
             y = highlight.getY();
             board[x][y].deleteHighlightField();
-        }while(highlights.peek() != null);
+        }
     }
 
     private void start() {

@@ -82,7 +82,7 @@ class Board{
                         deleteHighlightBoard();
                         setHighlightOrange();
                         chosenField.set(X, Y);
-                        showOptionForClick();
+                        showOptionForMove();
                     } else {
                         deleteHighlightBoard();
                         chosenField.unset();
@@ -90,7 +90,7 @@ class Board{
                 } else {
                     setHighlightOrange();
                     chosenField.set(X, Y);
-                    showOptionForClick();
+                    showOptionForMove();
                 }
             }
         }
@@ -110,7 +110,7 @@ class Board{
             }
         }
 
-        void showOptionForClick(){
+        void showOptionForMove(){
             int x;
             int y;
             for(int i = 0 ; i< pawn.getMoveOption(); i++)
@@ -122,16 +122,47 @@ class Board{
         }
 
         private void attackFirstClick(){
-            if(attack.contains(pawn))
-                System.out.println("ELO");
-
+            int prevX = chosenField.getX();
+            int prevY = chosenField.getY();
+            int X = position.getX();
+            int Y = position.getY();
+            if (attack.contains(pawn)) {
+                if (chosenField.isSet()) {
+                    if (X != prevX || Y != prevY) {
+                        deleteHighlightBoard();
+                        showAttackOption();
+                        setHighlightOrange();
+                        chosenField.set(X, Y);
+                        showOptionForAttack();
+                    } else {
+                        deleteHighlightBoard();
+                        showAttackOption();
+                        chosenField.unset();
+                    }
+                } else {
+                    setHighlightOrange();
+                    chosenField.set(X, Y);
+                    showOptionForAttack();
+                }
+            }
         }
 
         private void attackSecondClick(){
 
         }
-    }
 
+        void showOptionForAttack(){
+            int x;
+            int y;
+            for(int i = 0; i<pawn.getPossibleAttack().size(); i++)
+            {
+                System.out.println(pawn.getPossibleAttack().size());
+                x = pawn.getPossibleAttack().get(i).get(1).getX();
+                y = pawn.getPossibleAttack().get(i).get(1).getY();
+                board[x][y].setHighlightOrange();
+            }
+        }
+    }
 
 
     Board(ImageView[][] boardMain, Activity activity) {
@@ -360,7 +391,7 @@ class Board{
         Pawn option = null;
         PriorityQueue<Pawn> newAttack = new PriorityQueue<>();
         while(attack.peek() != null){
-            if(option != null && option != attack.peek())
+            if(option != null && !option.equals(attack.peek()))
                 break;
             option = attack.poll();
             newAttack.add(option);
@@ -401,7 +432,7 @@ class Board{
 
     private void attack(Pawn pawn, Pair destination){
         int x = (pawn.getCurrentPosition().getX() + destination.getX())/2;
-        int y = (pawn.getCurrentPosition().getY()+  destination.getY())/2;
+        int y = (pawn.getCurrentPosition().getY() +  destination.getY())/2;
         move(pawn,destination);
         delete(new Pair(x,y));
     }

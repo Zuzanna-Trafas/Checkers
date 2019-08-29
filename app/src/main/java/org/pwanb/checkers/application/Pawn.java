@@ -16,9 +16,6 @@ class Pawn implements Comparable<Pawn>{
         this.white = white;
         currentPosition = new Pair(x, y);
         possibleMove = new Pair[13];
-        for(int i = 0; i < 4; i++) {
-            possibleAttack.add(new LinkedList<Pair>());
-        }
     }
 
     Pawn(Pawn oldPawn) {
@@ -27,7 +24,7 @@ class Pawn implements Comparable<Pawn>{
         moveOption = oldPawn.moveOption;
         currentPosition = new Pair(oldPawn.currentPosition.getX(), oldPawn.currentPosition.getY());
         possibleMove = new Pair[13];
-        for(int i = 0; i < 4; i++)
+        for(int i = 0; i < oldPawn.possibleAttack.size(); i++)
             possibleAttack.add(new LinkedList<>(oldPawn.possibleAttack.get(i)));
     }
 
@@ -43,7 +40,7 @@ class Pawn implements Comparable<Pawn>{
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        return ((Pawn) o).currentPosition.equals(currentPosition);
+        return ((Pawn) o).moveOption == moveOption;
     }
 
     Pair[] getPossibleMove() { return possibleMove; }
@@ -51,6 +48,8 @@ class Pawn implements Comparable<Pawn>{
     int getMoveOption() { return moveOption; }
 
     Pair getCurrentPosition() { return currentPosition; }
+
+    LinkedList<LinkedList<Pair>> getPossibleAttack() { return possibleAttack; }
 
     boolean isKing() { return king; }
 
@@ -71,13 +70,14 @@ class Pawn implements Comparable<Pawn>{
         setEmptyQueue();
         moveOption = possibleAttack.get(0).size();
         for(int i = 0; i < possibleAttack.size(); i++)
-            this.possibleAttack.set(i, new LinkedList<>(possibleAttack.get(i)));
+            this.possibleAttack.add(new LinkedList<>(possibleAttack.get(i)));
         return moveOption;
     }
 
     private void setEmptyQueue(){
         for(int i = 0; i < possibleAttack.size(); i++)
             possibleAttack.get(i).clear();
+        possibleAttack.clear();
     }
 
 }

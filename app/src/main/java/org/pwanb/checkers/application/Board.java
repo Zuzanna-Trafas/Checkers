@@ -181,14 +181,18 @@ class Board{
             if(attack.size() > 0)
                 showAttackOption();
             else
-                updateMove(white);}
+                updateMove(white);
+            System.out.println(allMoves(white));
+        }
         else {
             updateAttack(black);
             if(attack.size() > 0)
                 showAttackOption();
             else
                 updateMove(black);
+            System.out.println(allMoves(black));
         }
+
     }
 
     private void updateMove(Pawn[] pawns){
@@ -418,5 +422,21 @@ class Board{
                 return i;
         }
         return -1;
+    }
+
+    private LinkedList<Pawn> allMoves(Pawn[] pawns){
+        LinkedList<Pawn> allMoves;
+        if(attack.size() > 0){
+            choseAttackOption();
+            allMoves = new LinkedList<>(attack);
+        } else {
+            allMoves = new LinkedList<>();
+            for(int i = 0; i < 12; i++){
+                if(pawns[i] != null && pawns[i].getMoveOption() > 0){
+                    allMoves.add(new Pawn(pawns[i]));
+                }
+            }
+        }
+        return allMoves;
     }
 }

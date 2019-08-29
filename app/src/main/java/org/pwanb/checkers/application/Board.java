@@ -147,18 +147,30 @@ class Board{
             }
         }
 
-        private void attackSecondClick(){
+        private void attackSecondClick(){  //TODO multi attack
+            int prevX = chosenField.getX();
+            int prevY = chosenField.getY();
+            for (LinkedList<Pair> path : board[prevX][prevY].pawn.getPossibleAttack() )
+            {
+                if (path.get(1).equals(position)){
+                    attack(board[prevX][prevY].pawn, position);
 
+
+                }
+            }
+            //zmiana gracza
+            chosenField.unset();
+            whiteTurn = !whiteTurn;
+            deleteHighlightBoard();
+            attack.clear();
+            possibleAction();
         }
 
         void showOptionForAttack(){
-            int x;
-            int y;
-            for(int i = 0; i<pawn.getPossibleAttack().size(); i++)
-            {
-                System.out.println(pawn.getPossibleAttack().size());
-                x = pawn.getPossibleAttack().get(i).get(1).getX();
-                y = pawn.getPossibleAttack().get(i).get(1).getY();
+            int x,y;
+            for(LinkedList<Pair> path: pawn.getPossibleAttack()) {
+                x = path.get(1).getX();
+                y = path.get(1).getY();
                 board[x][y].setHighlightOrange();
             }
         }

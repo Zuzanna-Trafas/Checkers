@@ -378,8 +378,6 @@ class Board{
         }
     }
 
-
-
     private void move(Pawn pawn, Pair destination){
         int x = pawn.getCurrentPosition().getX();
         int y = pawn.getCurrentPosition().getY();
@@ -401,15 +399,22 @@ class Board{
         board[x][y].deletePawn();
     }
 
-    private void deletePawn(Pawn pawn){
-        int x = pawn.getCurrentPosition().getX();
-        int y = pawn.getCurrentPosition().getY();
+    private void attack(Pawn pawn, Pair destination){
+        int x = (pawn.getCurrentPosition().getX() + destination.getX())/2;
+        int y = (pawn.getCurrentPosition().getY()+  destination.getY())/2;
+        move(pawn,destination);
+        delete(new Pair(x,y));
+    }
+
+    private void delete(Pair pawn){
+        int x = pawn.getX();
+        int y = pawn.getY();
         board[x][y].deletePawn();
         if(whiteTurn) {
-            int idx = idxOfPawn(black, pawn.getCurrentPosition());
+            int idx = idxOfPawn(black, pawn);
             black[idx] = null;
         }else{
-            int idx = idxOfPawn(white, pawn.getCurrentPosition());
+            int idx = idxOfPawn(white, pawn);
             white[idx]= null;
         }
     }

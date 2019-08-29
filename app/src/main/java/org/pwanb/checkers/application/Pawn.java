@@ -18,7 +18,6 @@ class Pawn implements Comparable<Pawn>{
         possibleMove = new Pair[13];
         for(int i = 0; i < 4; i++) {
             possibleAttack.add(new LinkedList<Pair>());
-
         }
     }
 
@@ -33,8 +32,9 @@ class Pawn implements Comparable<Pawn>{
     }
 
     @Override
-    public int compareTo(Pawn other) { return this.moveOption - other.moveOption; }
-
+    public int compareTo(Pawn other) { return (this.moveOption - other.moveOption)* -1; }
+    // PriorityQueue have the least element at the beginning, but we need the greatest, so
+    // we reverse the order by multiple by -1
     @Override
     public boolean equals(Object o) {
         if (this == o) {

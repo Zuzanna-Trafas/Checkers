@@ -1,16 +1,13 @@
 package org.pwanb.checkers.application;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
 
 class Pawn implements Comparable<Pawn>{
     private boolean king;
     private boolean white;
     private int moveOption;
     private Pair currentPosition;
-    private List<Queue<Pair>> possibleAttack = new ArrayList<>();
+    private LinkedList<LinkedList<Pair>> possibleAttack = new LinkedList<>();
     private Pair[] possibleMove;
 
 
@@ -19,21 +16,32 @@ class Pawn implements Comparable<Pawn>{
         this.white = white;
         currentPosition = new Pair(x, y);
         possibleMove = new Pair[13];
-        for(int i = 0; i < 4; i++)
-            possibleAttack.add(new LinkedList<Pair>());
     }
 
     Pawn(Pawn oldPawn) {
         white = oldPawn.white;
         king = oldPawn.king;
+        moveOption = oldPawn.moveOption;
         currentPosition = new Pair(oldPawn.currentPosition.getX(), oldPawn.currentPosition.getY());
         possibleMove = new Pair[13];
-        for(int i = 0; i < 4; i++)
-            possibleAttack.add(new LinkedList<Pair>());
+        for(int i = 0; i < oldPawn.possibleAttack.size(); i++)
+            possibleAttack.add(new LinkedList<>(oldPawn.possibleAttack.get(i)));
     }
 
     @Override
-    public int compareTo(Pawn other) { return this.moveOption - other.moveOption; }
+    public int compareTo(Pawn other) { return (this.moveOption - other.moveOption)* -1; }
+    // PriorityQueue have the least element at the beginning, but we need the greatest, so
+    // we reverse the order by multiple by -1
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        return ((Pawn) o).moveOption == moveOption;
+    }
 
     Pair[] getPossibleMove() { return possibleMove; }
 
@@ -41,28 +49,7 @@ class Pawn implements Comparable<Pawn>{
 
     Pair getCurrentPosition() { return currentPosition; }
 
-    Queue<Integer> getLongestQueue(){
-        Queue<Integer> List = new LinkedList<>();
-        int length, maxSize = -1;
-        for(int i = 0; i< 4; i++)
-        {
-            length = possibleAttack.get(i).size();
-            if (length > 0 ){
-                if(length > maxSize){
-                    List.clear();
-                    List.add(i);
-                    maxSize = length;
-                } else if(length == maxSize){
-                    List.add(i);
-                }
-            }
-        }
-        return List;
-    }
-
-    Queue<Pair> getPossibleAttack(int i) {
-        return possibleAttack.get(i);
-    }
+    LinkedList<LinkedList<Pair>> getPossibleAttack() { return possibleAttack; }
 
     boolean isKing() { return king; }
 
@@ -79,8 +66,18 @@ class Pawn implements Comparable<Pawn>{
 
     void setMoveOption(){ moveOption = 0;}
 
-    void setEmptyQueue(){
-        for(int i = 0; i < 4; i++)
-            possibleAttack.get(i).clear();
+    int setPossibleAttack(LinkedList<LinkedList<Pair>> possibleAttack){
+        setEmptyQueue();
+        moveOption = possibleAttack.get(0).size();
+        for(int i = 0; i < possibleAttack.size(); i++)
+            this.possibleAttack.add(new LinkedList<>(possibleAttack.get(i)));
+        return moveOption;
     }
+
+    private void setEmptyQueue(){
+        for(int i = 0; i < possibleAttack.size(); i++)
+            possibleAttack.get(i).clear();
+        possibleAttack.clear();
+    }
+
 }

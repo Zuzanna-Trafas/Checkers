@@ -6,6 +6,8 @@ import android.view.View;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.AppCompatImageView;
 
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.PriorityQueue;
 import java.util.Queue;
@@ -33,13 +35,25 @@ class Board{
             image.setOnClickListener(this);
         }
 
-        void setHighlight() {
-            Drawable highlight = activity.getResources().getDrawable(R.drawable.highlight);
+        Field(Field oldField) {
+            position = new Pair(oldField.position);
+            image = null;
+            pawn = new Pawn(oldField.pawn);
+        }
+
+        void setHighlightOrange() {
+            Drawable highlight = activity.getResources().getDrawable(R.drawable.highlight_organe);
             image.setBackground(highlight);
             highlights.add(new Pair (position.getX(),position.getY()));
         }
 
-        void deleteHighlight() { image.setBackground(null); }
+        void setHighlightRed() {
+            Drawable highlight = activity.getResources().getDrawable(R.drawable.highlight_red);
+            image.setBackground(highlight);
+            highlights.add(new Pair (position.getX(),position.getY()));
+        }
+
+        void deleteHighlightField() { image.setBackground(null); }
 
         void setPawn(final int x, final int y, final boolean white,final int imageID ) {
             this.pawn = new Pawn(x, y, white);
@@ -50,7 +64,6 @@ class Board{
             pawn = null;
             image.setImageResource(PawnGraphics.EMPTY.get());
         }
-
 
         @Override
         public void onClick(View v) {
@@ -75,18 +88,18 @@ class Board{
             if (pawn.isWhite() == whiteTurn) {
                 if (chosenField.isSet()) {
                     if (X != prevX || Y != prevY) {
-                        deleteHighlight();
-                        setHighlight();
+                        deleteHighlightBoard();
+                        setHighlightOrange();
                         chosenField.set(X, Y);
-                        showOption();
+                        showOptionForMove();
                     } else {
-                        deleteHighlight();
+                        deleteHighlightBoard();
                         chosenField.unset();
                     }
                 } else {
-                    setHighlight();
+                    setHighlightOrange();
                     chosenField.set(X, Y);
-                    showOption();
+                    showOptionForMove();
                 }
             }
         }
@@ -96,35 +109,102 @@ class Board{
             int prevY = chosenField.getY();
             for (int i = 0; i < board[prevX][prevY].pawn.getMoveOption(); i++)
             {
-                if (board[prevX][prevY].pawn.getPossibleMove()[i].isEqual(position)){
+                if (board[prevX][prevY].pawn.getPossibleMove()[i].equals(position)){
                     move(board[prevX][prevY].pawn, position);
                     chosenField.unset();
                     whiteTurn = !whiteTurn;
-                    possibleMoves();
+                    possibleAction();
                     break;
                 }
             }
         }
-        private void attackFirstClick(){
 
-        }
-
-        private void attackSecondClick(){
-
-        }
-
-        void showOption(){
+        void showOptionForMove(){
             int x;
             int y;
-            for(int i = 0 ; i< pawn.getMoveOption(); i++)
+            for(int i = 0 ; i < pawn.getMoveOption();i++)
             {
                 x = pawn.getPossibleMove()[i].getX();
                 y = pawn.getPossibleMove()[i].getY();
-                board[x][y].setHighlight();
+                board[x][y].setHighlightOrange();
             }
         }
-    }
 
+        private void attackFirstClick(){
+            int prevX = chosenField.getX();
+            int prevY = chosenField.getY();
+            int X = position.getX();
+            int Y = position.getY();
+            if (attack.contains(pawn)) {
+                if (chosenField.isSet()) {
+                    if (X != prevX || Y != prevY) {
+                        deleteHighlightBoard();
+                        showAttackOption();
+                        setHighlightOrange();
+                        chosenField.set(X, Y);
+                        showOptionForAttack();
+                    } else {
+                        deleteHighlightBoard();
+                        showAttackOption();
+                        chosenField.unset();
+                    }
+                } else {
+                    setHighlightOrange();
+                    chosenField.set(X, Y);
+                    showOptionForAttack();
+                }
+            }
+        }
+
+        private void attackSecondClick(){
+            int prevX = chosenField.getX();
+            int prevY = chosenField.getY();
+            for (LinkedList<Pair> path : board[prevX][prevY].pawn.getPossibleAttack() )
+            {
+                if (path.get(1).equals(position)){
+                    attack.clear();
+                    attack(board[prevX][prevY].pawn, position);
+                    chosenField.set(position.getX(), position.getY());
+                    if(!updateAttack(chosenField)) {
+                        attack.add(pawn);
+                        showAttackOption();
+                        chosenField.unset();
+                        attackFirstClick();
+                    }
+                    else{
+                       chosenField.unset();
+                       whiteTurn = !whiteTurn;
+                       deleteHighlightBoard();
+                       possibleAction();
+                    }
+                }
+
+            }
+        }
+
+
+        void showOptionForAttack(){
+            int x,y;
+            for(LinkedList<Pair> path: pawn.getPossibleAttack()) {
+                x = path.get(1).getX();
+                y = path.get(1).getY();
+                board[x][y].setHighlightOrange();
+            }
+        }
+
+        boolean updateAttack(Pair field){
+            LinkedList<Pair> current;
+            Iterator<LinkedList<Pair>> itr = pawn.getPossibleAttack().iterator();
+            while (itr.hasNext()) {
+                current = itr.next();
+                current.poll();
+                if (!(current.peek()).equals(field) || current.size() == 1){
+                    itr.remove();
+                }
+            }
+            return pawn.getPossibleAttack().size() == 0;
+        }
+    }
 
 
     Board(ImageView[][] boardMain, Activity activity) {
@@ -136,6 +216,35 @@ class Board{
             }
         }
         this.start();
+    }
+
+    Board(Board oldBoard) {
+        whiteTurn = oldBoard.whiteTurn;
+        chosenField = new Pair();
+        this.activity = oldBoard.activity;
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                board[i][j] = new Field(oldBoard.board[i][j]);
+            }
+        }
+        for(int i =0 ;i<12;i++)
+        {
+            white[i]= new Pawn(oldBoard.white[i]);
+            black[i]= new Pawn(oldBoard.black[i]);
+        }
+        attack = new PriorityQueue<>(oldBoard.attack);
+        highlights = new LinkedList<>();
+    }
+
+    private void deleteHighlightBoard(){
+        Pair highlight;
+        int x, y;
+        while(highlights.peek() != null){
+            highlight = highlights.poll();
+            x = highlight.getX();
+            y = highlight.getY();
+            board[x][y].deleteHighlightField();
+        }
     }
 
     private void start() {
@@ -154,51 +263,72 @@ class Board{
             black[3*i+1]= new Pawn(board[2*i][6].pawn);
             black[3*i+2]= new Pawn(board[2*i+1][7].pawn);
         }
-        this.possibleMoves();
+        this.possibleAction();
     }
 
-    private void possibleMoves(){
+    private void possibleAction(){
         if(whiteTurn) {
-            updateAttackWhite();
+            searchAttack(white);
             if(attack.size() > 0)
                 showAttackOption();
             else
-                updateMoveWhite();}
+                searchMove(white);
+            System.out.println(allMoves(white));
+        }
         else {
-            updateAttackBlack();
+            searchAttack(black);
             if(attack.size() > 0)
                 showAttackOption();
             else
-                updateMoveBlack();
+                searchMove(black);
+            System.out.println(allMoves(black));
         }
+
     }
 
-    private void updateMoveWhite(){
+    private void searchMove(Pawn[] pawns){
         for (int i =0; i<12; i++)
         {
-            if(white[i] != null){
-                int x = white[i].getCurrentPosition().getX();
-                int y = white[i].getCurrentPosition().getY();
+            if(pawns[i] != null)
+            {
+                int x = pawns[i].getCurrentPosition().getX();
+                int y = pawns[i].getCurrentPosition().getY();
                 int itr = 0;
                 board[x][y].pawn.setMoveOption();
-                white[i].setMoveOption();
-                if (white[i].isKing())
+                pawns[i].setMoveOption();
+                if (pawns[i].isKing())
                 {
                     //TODO king move
-                }
-                else
-                {
-                    if(y < 7)
-                    {
-                        if(x<7 && board[x+1][y+1].pawn == null) {
-                            white[i].setPossibleMove(itr, new Pair(x+1,y+1));
-                            board[x][y].pawn.setPossibleMove(itr, new Pair(x+1,y+1));
-                            itr++;
+                } else {
+                    if(whiteTurn){
+                        if (y < 7)
+                        {
+                            if (x < 7 && board[x + 1][y + 1].pawn == null)
+                            {
+                                pawns[i].setPossibleMove(itr, new Pair(x + 1, y + 1));
+                                board[x][y].pawn.setPossibleMove(itr, new Pair(x + 1, y + 1));
+                                itr++;
+                            }
+                            if (x > 0 && board[x - 1][y + 1].pawn == null)
+                            {
+                                pawns[i].setPossibleMove(itr, new Pair(x - 1, y + 1));
+                                board[x][y].pawn.setPossibleMove(itr, new Pair(x - 1, y + 1));
+                            }
                         }
-
-                        if(x > 0 && board[x-1][y+1].pawn == null){
-                            white[i].setPossibleMove(itr, new Pair(x-1,y+1));
-                            board[x][y].pawn.setPossibleMove(itr, new Pair(x-1,y+1));
+                    } else {
+                        if(y > 0)
+                        {
+                            if(x<7 && board[x+1][y-1].pawn == null)
+                            {
+                                pawns[i].setPossibleMove(itr, new Pair(x+1,y-1));
+                                board[x][y].pawn.setPossibleMove(itr, new Pair(x+1,y-1));
+                                itr++;
+                            }
+                            if(x > 0 && board[x-1][y-1].pawn == null)
+                            {
+                                pawns[i].setPossibleMove(itr, new Pair(x-1,y-1));
+                                board[x][y].pawn.setPossibleMove(itr, new Pair(x-1,y-1));
+                            }
                         }
                     }
                 }
@@ -206,58 +336,28 @@ class Board{
         }
     }
 
-    private void updateMoveBlack(){
-        for (int i =0; i<12; i++)
-        {
-            if(black[i] != null){
-                int x = black[i].getCurrentPosition().getX();
-                int y = black[i].getCurrentPosition().getY();
-                int itr = 0;
-                board[x][y].pawn.setMoveOption();
-                black[i].setMoveOption();
-                if (black[i].isKing())
-                {
-                    //TODO king move
-                }
-                else
-                {
-                    if(y > 0)
-                    {
-                        if(x<7 && board[x+1][y-1].pawn == null) {
-                            black[i].setPossibleMove(itr, new Pair(x+1,y-1));
-                            board[x][y].pawn.setPossibleMove(itr, new Pair(x+1,y-1));
-                            itr++;
-
-                        }
-                        if(x > 0 && board[x-1][y-1].pawn == null){
-                            black[i].setPossibleMove(itr, new Pair(x-1,y-1));
-                            board[x][y].pawn.setPossibleMove(itr, new Pair(x-1,y-1));
-
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private void updateAttackWhite(){
+    private void searchAttack(Pawn[] pawns){
         boolean empty = true;
+        int priority;
         for (int i =0; i<12; i++)
         {
-            if(white[i] != null){
+            if(pawns[i] != null){
                 empty = false;
-                int x = white[i].getCurrentPosition().getX();
-                int y = white[i].getCurrentPosition().getY();
-                int itr = 0;
-                board[x][y].pawn.setMoveOption();
-                white[i].setMoveOption();
-                if (white[i].isKing())
+                int x = pawns[i].getCurrentPosition().getX();
+                int y = pawns[i].getCurrentPosition().getY();
+                pawns[i].setMoveOption();
+                if (pawns[i].isKing())
                 {
                     //TODO king move
                 }
                 else
                 {
-
+                    System.out.println(i);
+                    priority = pawns[i].setPossibleAttack(possibleAttack(pawns[i].getCurrentPosition(),new LinkedList<Pair>()));
+                    board[x][y].pawn = new Pawn (pawns[i]);
+                    if(priority > 1){
+                        attack.add(pawns[i]);
+                    }
                 }
             }
         }
@@ -266,64 +366,101 @@ class Board{
         }
     }
 
-    private void updateAttackBlack(){
-        boolean empty = true;
-        for (int i =0; i<12; i++)
+    private LinkedList<LinkedList<Pair>> possibleAttack(Pair pawn, LinkedList<Pair> deleted){
+        int x = pawn.getX();
+        int y = pawn.getY();
+        LinkedList<LinkedList<Pair>> help,outPossibleAttack = null;
+        if(y < 6)
         {
-            if(black[i] != null){
-                empty = false;
-                int x = black[i].getCurrentPosition().getX();
-                int y = black[i].getCurrentPosition().getY();
-                int itr = 0;
-                board[x][y].pawn.setMoveOption();
-                black[i].setMoveOption();
-                if (black[i].isKing())
-                {
-                    //TODO king move
-                }
-                else
-                {
+            if(x <6 && board[x+1][y+1].pawn != null && board[x+1][y+1].pawn.isWhite() != whiteTurn
+                    && board[x+2][y+2].pawn == null && !deleted.contains(new Pair(x+1,y+1))) {
+                deleted.addLast(new Pair(x+1,y+1));
+                outPossibleAttack = possibleAttack(new Pair(x+2, y+2), deleted);
+                deleted.removeLast();
+            }
 
+            if(x >1 && board[x-1][y+1].pawn != null && board[x-1][y+1].pawn.isWhite() != whiteTurn
+                    &&  board[x-2][y+2].pawn == null && !deleted.contains(new Pair(x-1,y+1))){
+                deleted.addLast(new Pair(x-1,y+1));
+                help = possibleAttack(new Pair(x-2, y+2), deleted);
+                deleted.removeLast();
+                if(outPossibleAttack != null){
+                    if(outPossibleAttack.get(0).size() == help.get(0).size()){
+                        outPossibleAttack.addAll(help);
+                    }else if (outPossibleAttack.get(0).size() < help.get(0).size()){
+                        outPossibleAttack = help;
+                    }
+                }else{
+                    outPossibleAttack = help;
                 }
             }
         }
-        if(empty) {
-            //TODO stop game
+
+        if(y > 1){
+            if(x >1 && board[x-1][y-1].pawn != null && board[x-1][y-1].pawn.isWhite() != whiteTurn
+                    &&  board[x-2][y-2].pawn == null && !deleted.contains(new Pair(x-1,y-1))){
+                deleted.addLast(new Pair(x-1,y-1));
+                help = possibleAttack(new Pair(x-2, y-2),deleted);
+                deleted.removeLast();
+                if(outPossibleAttack != null){
+                    if(outPossibleAttack.get(0).size() == help.get(0).size()){
+                        outPossibleAttack.addAll(help);
+                    }else if (outPossibleAttack.get(0).size() < help.get(0).size()){
+                        outPossibleAttack = help;
+                    }
+                }else{
+                    outPossibleAttack = help;
+                }
+            }
+
+            if(x <6 && board[x+1][y-1].pawn != null && board[x+1][y-1].pawn.isWhite() != whiteTurn
+                    &&  board[x+2][y-2].pawn == null&& !deleted.contains(new Pair(x+1,y-1))) {
+                deleted.addLast(new Pair(x+1,y-1));
+                help = possibleAttack(new Pair(x+2, y-2),deleted);
+                deleted.removeLast();
+                if(outPossibleAttack != null){
+                    if(outPossibleAttack.get(0).size() == help.get(0).size()){
+                        outPossibleAttack.addAll(help);
+                    }else if (outPossibleAttack.get(0).size() < help.get(0).size()){
+                        outPossibleAttack = help;
+                    }
+                }else{
+                    outPossibleAttack = help;
+                }
+            }
+
         }
+        if (outPossibleAttack == null){
+            outPossibleAttack = new LinkedList<>();
+            outPossibleAttack.add(new LinkedList<Pair>());
+        }
+        for (int i = 0; i<outPossibleAttack.size(); i++)
+            outPossibleAttack.get(i).addFirst(pawn);
+        System.out.println(outPossibleAttack);
+        return outPossibleAttack;
+    }
+
+    private void choseAttackOption(){
+        Pawn option = null;
+        PriorityQueue<Pawn> newAttack = new PriorityQueue<>();
+        while(attack.peek() != null){
+            if(option != null && !option.equals(attack.peek()))
+                break;
+            option = attack.poll();
+            newAttack.add(option);
+        }
+        attack = newAttack;
     }
 
     private void showAttackOption(){
-        Pawn option;
-        int x, y, field;
-        Queue<Integer> fields;
-        do {
-        option = attack.poll();
-        x = option.getCurrentPosition().getX();
-        y = option.getCurrentPosition().getY();
-        board[x][y].setHighlight();
-        fields = option.getLongestQueue();
-        do {
-            field = fields.poll();
-            x = option.getPossibleAttack(field).peek().getX();
-            y = option.getPossibleAttack(field).peek().getY();
-            board[x][y].setHighlight();
-        }while(fields.peek() != null);
-    }while(option == attack.peek());
-    }
-
-
-    private void deleteHighlight(){
-        Pair highlight;
         int x, y;
-        do {
-            highlight = highlights.poll();
-            x = highlight.getX();
-            y = highlight.getY();
-            board[x][y].deleteHighlight();
-        }while(highlights.peek() != null);
-
+        choseAttackOption();
+        for (Pawn pawn : attack) {
+            x = pawn.getCurrentPosition().getX();
+            y = pawn.getCurrentPosition().getY();
+            board[x][y].setHighlightRed();
+        }
     }
-
 
     private void move(Pawn pawn, Pair destination){
         int x = pawn.getCurrentPosition().getX();
@@ -342,19 +479,39 @@ class Board{
             int idx = idxOfPawn(black, pawn.getCurrentPosition());
             black[idx].setCurrentPosition(destination);
         }
-        deleteHighlight();
+        deleteHighlightBoard();
         board[x][y].deletePawn();
     }
 
-    private void deletePawn(Pawn pawn){
-        int x = pawn.getCurrentPosition().getX();
-        int y = pawn.getCurrentPosition().getY();
+    private void attack(Pawn pawn, Pair destination){
+        int x = (pawn.getCurrentPosition().getX() + destination.getX())/2;
+        int y = (pawn.getCurrentPosition().getY() +  destination.getY())/2;
+        move(pawn,destination);
+        delete(new Pair(x,y));
+    }
+
+    private void attackAI(Pawn pawn, LinkedList<Pair> listOfDestination){
+        int x,y;
+        Pair destination;
+        listOfDestination.remove();
+        while (listOfDestination.size() > 1){
+            destination = listOfDestination.poll();
+            x = (pawn.getCurrentPosition().getX() + destination.getX())/2;
+            y = (pawn.getCurrentPosition().getY() +  destination.getY())/2;
+            move(pawn,destination);
+            delete(new Pair(x,y));
+        }
+    }
+
+    private void delete(Pair pawn){
+        int x = pawn.getX();
+        int y = pawn.getY();
         board[x][y].deletePawn();
         if(whiteTurn) {
-            int idx = idxOfPawn(black, pawn.getCurrentPosition());
+            int idx = idxOfPawn(black, pawn);
             black[idx] = null;
         }else{
-            int idx = idxOfPawn(white, pawn.getCurrentPosition());
+            int idx = idxOfPawn(white, pawn);
             white[idx]= null;
         }
     }
@@ -363,16 +520,30 @@ class Board{
     {
         for(int i = 0; i< 12; i++)
         {
-            if(pawns[i]!= null && position.isEqual(pawns[i].getCurrentPosition()))
+            if(pawns[i]!= null && position.equals(pawns[i].getCurrentPosition()))
                 return i;
         }
         return -1;
     }
+
+    private LinkedList<Move> allMoves(final Pawn[] pawns){
+        LinkedList<Move> allMoves = new LinkedList<>();
+        if(attack.size() > 0){
+            choseAttackOption();
+            for(Pawn p: attack){
+                for(LinkedList<Pair> move: p.getPossibleAttack()){
+                    allMoves.add(new Move(p, move));
+                }
+            }
+        } else {
+            for(int i = 0; i < 12; i++){
+                if(pawns[i] != null && pawns[i].getMoveOption() > 0){
+                    for(int j = 0 ; j < pawns[i].getMoveOption();j++){
+                        allMoves.add(new Move(pawns[i], new LinkedList<>(Collections.singletonList(pawns[i].getPossibleMove()[j]))));
+                    }
+                }
+            }
+        }
+        return allMoves;
+    }
 }
-
-
-
-
-
-
-

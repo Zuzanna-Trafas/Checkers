@@ -13,6 +13,15 @@ final class Pair {
         Y = y;
     }
 
+    Pair(Pair oldPair) {
+        set = oldPair.set;
+        X = oldPair.X;
+        Y = oldPair.Y;
+    }
+
+    @Override public String toString() {
+        return X + " " + Y;
+    }
     int getX() { return X; }
 
     int getY() { return Y; }
@@ -27,9 +36,14 @@ final class Pair {
 
     boolean isSet(){ return set; }
 
-    boolean isEqual(Pair other){
-        if (other.X == this.X && other.Y == this.Y)
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
             return true;
-        return false;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        return ((Pair) o).X == X && ((Pair) o).Y == Y ;
     }
 }

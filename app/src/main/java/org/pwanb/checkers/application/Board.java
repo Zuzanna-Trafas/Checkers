@@ -469,8 +469,6 @@ class Board{
         int dstY = destination.getY();
         board[dstX][dstY].pawn = new Pawn(board[x][y].pawn);
         board[dstX][dstY].pawn.setCurrentPosition(destination);
-        if((dstY == 7 && whiteTurn) || (dstY == 0 && !whiteTurn))
-            board[dstX][dstY].pawn.setKing();
         board[dstX][dstY].image.setImageResource(PawnGraphics.get(whiteTurn, board[dstX][dstY].pawn.isKing()));
         if(whiteTurn) {
             int idx = idxOfPawn(white, pawn.getCurrentPosition());
@@ -514,6 +512,23 @@ class Board{
             int idx = idxOfPawn(white, pawn);
             white[idx]= null;
         }
+    }
+
+    private void levelUp(Pawn pawn){
+        int X = pawn.getCurrentPosition().getX();
+        int Y = pawn.getCurrentPosition().getY();
+        if((Y == 7 && whiteTurn) || (Y == 0 && !whiteTurn)){
+            board[X][Y].pawn.setKing();
+            if(whiteTurn) {
+                int idx = idxOfPawn(white, pawn.getCurrentPosition());
+                white[idx].setCurrentPosition(pawn.getCurrentPosition());
+            }else{
+                int idx = idxOfPawn(black, pawn.getCurrentPosition());
+                black[idx].setCurrentPosition(pawn.getCurrentPosition());
+            }
+            board[X][Y].image.setImageResource(PawnGraphics.get(whiteTurn, board[X][Y].pawn.isKing()));
+        }
+
     }
 
     private int idxOfPawn(Pawn[] pawns, Pair position)

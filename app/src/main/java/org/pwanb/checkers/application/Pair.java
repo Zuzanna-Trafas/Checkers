@@ -13,6 +13,12 @@ final class Pair {
         Y = y;
     }
 
+    Pair(Pair oldPair) {
+        set = oldPair.set;
+        X = oldPair.X;
+        Y = oldPair.Y;
+    }
+
     @Override public String toString() {
         return X + " " + Y;
     }

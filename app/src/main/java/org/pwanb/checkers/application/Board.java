@@ -298,43 +298,61 @@ class Board{
                 pawns[i].setMoveOption();
                 if (pawns[i].isKing())
                 {
-                    //TODO king move
+                    int j = 1;
+                    while(x+j <8 && y+j <8 && board[x + j][y + j].pawn == null)
+                    {
+                        pawns[i].setPossibleMove(itr, new Pair(x + j, y + j));
+                        board[x][y].pawn.setPossibleMove(itr, new Pair(x + j, y + j));
+                        itr++;
+                        j++;
+                    }
+
+                    j = 1;
+                    while(x - j > -1 && y + j < 8 && board[x - j][y + j].pawn == null)
+                    {
+                        pawns[i].setPossibleMove(itr, new Pair(x - j, y + j));
+                        board[x][y].pawn.setPossibleMove(itr, new Pair(x - j, y + j));
+                        itr++;
+                        j++;
+                    }
+
+                    j = 1;
+                    while(x - j > -1 && y - j > -1 && board[x - j][y - j].pawn == null)
+                    {
+                        pawns[i].setPossibleMove(itr, new Pair(x - j, y - j));
+                        board[x][y].pawn.setPossibleMove(itr, new Pair(x - j, y - j));
+                        itr++;
+                        j++;
+                    }
+
+                    j = 1;
+                    while(x + j < 8 && y - j > -1 && board[x + j][y - j].pawn == null)
+                    {
+                        pawns[i].setPossibleMove(itr, new Pair(x + j, y - j));
+                        board[x][y].pawn.setPossibleMove(itr, new Pair(x + j, y - j));
+                        itr++;
+                        j++;
+                    }
                 } else {
-                    if(whiteTurn){
-                        if (y < 7)
+                    if(y > 0)
+                    {
+                        if(x<7 && board[x+1][y-1].pawn == null)
                         {
-                            if (x < 7 && board[x + 1][y + 1].pawn == null)
-                            {
-                                pawns[i].setPossibleMove(itr, new Pair(x + 1, y + 1));
-                                board[x][y].pawn.setPossibleMove(itr, new Pair(x + 1, y + 1));
-                                itr++;
-                            }
-                            if (x > 0 && board[x - 1][y + 1].pawn == null)
-                            {
-                                pawns[i].setPossibleMove(itr, new Pair(x - 1, y + 1));
-                                board[x][y].pawn.setPossibleMove(itr, new Pair(x - 1, y + 1));
-                            }
+                            pawns[i].setPossibleMove(itr, new Pair(x+1,y-1));
+                            board[x][y].pawn.setPossibleMove(itr, new Pair(x+1,y-1));
+                            itr++;
                         }
-                    } else {
-                        if(y > 0)
+                        if(x > 0 && board[x-1][y-1].pawn == null)
                         {
-                            if(x<7 && board[x+1][y-1].pawn == null)
-                            {
-                                pawns[i].setPossibleMove(itr, new Pair(x+1,y-1));
-                                board[x][y].pawn.setPossibleMove(itr, new Pair(x+1,y-1));
-                                itr++;
-                            }
-                            if(x > 0 && board[x-1][y-1].pawn == null)
-                            {
-                                pawns[i].setPossibleMove(itr, new Pair(x-1,y-1));
-                                board[x][y].pawn.setPossibleMove(itr, new Pair(x-1,y-1));
-                            }
+                            pawns[i].setPossibleMove(itr, new Pair(x-1,y-1));
+                            board[x][y].pawn.setPossibleMove(itr, new Pair(x-1,y-1));
                         }
                     }
                 }
             }
         }
     }
+
 
     private void searchAttack(Pawn[] pawns){
         boolean empty = true;

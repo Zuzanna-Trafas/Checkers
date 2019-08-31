@@ -1,6 +1,8 @@
 package org.pwanb.checkers.application;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.widget.ImageView;
 import android.view.View;
 import android.graphics.drawable.Drawable;
@@ -11,7 +13,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.PriorityQueue;
 import java.util.Queue;
-import java.util.concurrent.TimeUnit;
+
 
 class Board{
     private boolean whiteTurn;
@@ -137,7 +139,7 @@ class Board{
             int prevY = chosenField.getY();
             int X = position.getX();
             int Y = position.getY();
-            if (attack.contains(pawn)) {
+            if (attack.contains(pawn) && pawn.isWhite() == whiteTurn) {
                 if (chosenField.isSet()) {
                     if (X != prevX || Y != prevY) {
                         deleteHighlightBoard();
@@ -393,7 +395,32 @@ class Board{
             }
         }
         if(empty) {
-            //TODO stop game
+            AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+            builder.setTitle("THE END");
+            if (whiteTurn)
+                builder.setMessage("The BLACK player is winner");
+            else
+                builder.setMessage("The WHITE player is winner");
+            builder.setPositiveButton("Once again", new DialogInterface.OnClickListener(){
+                @Override
+                public void onClick(DialogInterface dialog, int something) {
+                    for (int i = 0; i < 8; i++) {
+                        for (int j = 0; j < 8; j++) {
+                            board[i][j].deletePawn();
+                        }
+                    }
+                    start();
+                }
+            });
+            builder.setNegativeButton("Exit", new DialogInterface.OnClickListener(){
+                @Override
+                public void onClick(DialogInterface dialog, int something) {
+                    activity.finish();
+                    System.exit(0);
+                }
+            });
+            AlertDialog dialog = builder.create();
+            dialog.show();
         }
     }
 

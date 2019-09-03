@@ -532,7 +532,6 @@ class Board{
                     deleted.addLast(new Pair(x - i, y + i));
                     j = 1;
                     while(x - i - j > -1 && y + i + j < 8 && board[x-i-j][y+i+j].pawn == null){
-                        System.out.println(j);
                         help = possibleAttackKing(new Pair(x - i - j, y + i + j), deleted);
                         if (outPossibleAttack != null)
                         {
@@ -562,7 +561,6 @@ class Board{
                     deleted.addLast(new Pair(x - i, y - i));
                     j = 1;
                     while(x - i - j > -1 && y - i - j > -1 && board[x-i-j][y-i-j].pawn == null ){
-                        System.out.println(j);
                         help = possibleAttackKing(new Pair(x - i - j, y - i - j), deleted);
                         if (outPossibleAttack != null)
                         {
@@ -593,7 +591,6 @@ class Board{
                     deleted.addLast(new Pair(x + i, y - i));
                     j = 1;
                     while(x + i + j < 8 && y - i - j > -1 && board[x+i+j][y-i-j].pawn == null ){
-                        System.out.println(j);
                         help = possibleAttackKing(new Pair(x + i + j, y - i - j), deleted);
                         if (outPossibleAttack != null)
                         {

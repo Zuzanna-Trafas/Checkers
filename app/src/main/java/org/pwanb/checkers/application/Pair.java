@@ -19,9 +19,9 @@ final class Pair {
         Y = oldPair.Y;
     }
 
-    @Override public String toString() {
-        return X + " " + Y;
-    }
+    @Override
+    public String toString() { return X + " " + Y; }
+
     int getX() { return X; }
 
     int getY() { return Y; }
@@ -31,7 +31,6 @@ final class Pair {
         X = x;
         Y = y;
     }
-
     void unset(){ set = false; }
 
     boolean isSet(){ return set; }
@@ -47,3 +46,5 @@ final class Pair {
         return ((Pair) o).X == X && ((Pair) o).Y == Y ;
     }
 }
+
+

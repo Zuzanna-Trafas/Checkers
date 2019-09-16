@@ -6,12 +6,18 @@ class Move {
 
     private Pawn pawn;
     private LinkedList<Pair> destination;
-    private int power;
 
     Move(Pawn pawn, LinkedList<Pair> destination) {
         this.pawn = new Pawn(pawn);
         this.destination = destination;
-        this.power = 0;
+    }
+
+    public Pawn getPawn() {
+        return pawn;
+    }
+
+    public LinkedList<Pair> getDestination() {
+        return destination;
     }
 
     @Override public String toString() {

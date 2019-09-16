@@ -640,7 +640,7 @@ class Board{
         }
     }
 
-    private void move(Pawn pawn, Pair destination){
+    public void move(Pawn pawn, Pair destination){
         int x = pawn.getCurrentPosition().getX();
         int y = pawn.getCurrentPosition().getY();
         int dstX = destination.getX();
@@ -797,7 +797,7 @@ class Board{
         }
     }
 
-    private LinkedList<Move> allMoves(final Pawn[] pawns) {
+    LinkedList<Move> allMoves(final Pawn[] pawns) {
         LinkedList<Move> allMoves = new LinkedList<>();
         if (attack.size() > 0) {
             choseAttackOption();
@@ -816,5 +816,13 @@ class Board{
             }
         }
         return allMoves;
+    }
+
+    public Pawn[] getWhitePawns() {
+        return whitePawns;
+    }
+
+    public Pawn[] getBlackPawns() {
+        return blackPawns;
     }
 }

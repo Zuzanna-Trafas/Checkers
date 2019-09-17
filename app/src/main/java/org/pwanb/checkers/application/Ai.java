@@ -119,29 +119,28 @@ class Ai {
     }
 
     public Move selectMove(DecisionTree decisionTree) {
-        Move chosenMove = null;
-        int max = decisionTree.getScore();
-        DecisionTree decisionTree1 = null;
-        DecisionTree decisionTree2 = null;
+        int max = -20;
+        Move selectedMove = null;
         for (DecisionTree child : decisionTree.getChildren()) {
+            int min1 = 20;
+            for (DecisionTree child1 : child.getChildren()) {
+                int max1 = -20;
+                for (DecisionTree child2 : child1.getChildren()) {
+                    if (child2.getScore() >= max) {
+                        max1 = child2.getScore();
+                    }
+                }
+                child1.setScore(max1);
+                if (child1.getScore() <= min1) {
+                    min1 = child1.getScore();
+                }
+            }
+            child.setScore(min1);
             if (child.getScore() >= max) {
                 max = child.getScore();
-                decisionTree1 = child;
+                selectedMove = child.getMove();
             }
         }
-        for (DecisionTree child1 : decisionTree1.getChildren()) {
-            if (child1.getScore() <= max) {
-                max = child1.getScore();
-                decisionTree2 = child1;
-            }
-        }
-        for (DecisionTree child2 : decisionTree2.getChildren()) {
-            if (child2.getScore() >= max) {
-                max = child2.getScore();
-                chosenMove = child2.getMove();
-            }
-        }
-
-        return chosenMove;
+        return selectedMove;
     }
 }

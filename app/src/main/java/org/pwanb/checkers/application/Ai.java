@@ -2,15 +2,17 @@ package org.pwanb.checkers.application;
 
 import java.util.LinkedList;
 
-public class Ai {
+class Ai {
     private DecisionTree decisionTree;
     private Move move;
 
-
-
-    public Move aiMove(Board board) {
-        decisionTree = makeDecisionTree(board);
+    Ai(Board board){
+        Board copyBoard = new Board(board);
+        decisionTree = makeDecisionTree(copyBoard);
         move = selectMove(decisionTree);
+    }
+
+    public Move getMove() {
         return move;
     }
 

@@ -45,7 +45,11 @@ class Board{
         Field(Field oldField) {
             position = new Pair(oldField.position);
             image = null;
-            pawn = new Pawn(oldField.pawn);
+            if(oldField.pawn != null) {
+                pawn = new Pawn(oldField.pawn);
+            }else {
+                pawn = null;
+            }
         }
 
         void setHighlightOrange() {
@@ -128,8 +132,7 @@ class Board{
                     levelUp(board[position.getX()][position.getY()].pawn);
                     chosenField.unset();
                     whiteTurn = !whiteTurn;
-                    //TODO function return move
-                    //actionAI();
+                    actionAI();
                     break;
                 }
             }
@@ -195,8 +198,7 @@ class Board{
                             drawBlack = 0;
                         whiteTurn = !whiteTurn;
                         deleteHighlightBoard();
-                        //TODO function return move
-                        //actionAI();
+                        actionAI();
                     }
                     break;
                 }
@@ -828,8 +830,10 @@ class Board{
         return allMoves;
     }
 
-    void actionAI(Move move){
+    void actionAI(){
         possibleAction();
+        Ai computer = new Ai(this);
+        Move move = computer.getMove();
         if(move.getDestination().size() > 1){
             attackAI(move.getPawn(), move.getDestination());
         } else{

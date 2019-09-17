@@ -11,10 +11,14 @@ public class DecisionTree {
     private ArrayList<DecisionTree> children;
     private Move move;
 
-    public DecisionTree(Board board, int score, Move move, DecisionTree ... children) {
+    public DecisionTree(Board board, int score, Move move, DecisionTree... children) {
         this.board = board;
         this.score = score;
-        this.children = new ArrayList<>(Arrays.asList(children));
+        if (children != null){
+            this.children = new ArrayList<>(Arrays.asList(children));
+        }else
+            this.children = null;
+
         this.move = move;
     }
 

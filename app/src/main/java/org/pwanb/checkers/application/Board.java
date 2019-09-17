@@ -128,7 +128,8 @@ class Board{
                     levelUp(board[position.getX()][position.getY()].pawn);
                     chosenField.unset();
                     whiteTurn = !whiteTurn;
-                    possibleAction();
+                    //TODO function return move
+                    //actionAI();
                     break;
                 }
             }
@@ -194,7 +195,8 @@ class Board{
                             drawBlack = 0;
                         whiteTurn = !whiteTurn;
                         deleteHighlightBoard();
-                        possibleAction();
+                        //TODO function return move
+                        //actionAI();
                     }
                     break;
                 }
@@ -257,6 +259,14 @@ class Board{
         }
         attack = new PriorityQueue<>(oldBoard.attack);
         highlights = new LinkedList<>();
+    }
+
+    Pawn[] getWhitePawns() {
+        return whitePawns;
+    }
+
+    Pawn[] getBlackPawns() {
+        return blackPawns;
     }
 
     private void deleteHighlightBoard(){
@@ -818,11 +828,16 @@ class Board{
         return allMoves;
     }
 
-    public Pawn[] getWhitePawns() {
-        return whitePawns;
+    void actionAI(Move move){
+        possibleAction();
+        if(move.getDestination().size() > 1){
+            attackAI(move.getPawn(), move.getDestination());
+        } else{
+            move(move.getPawn(), move.getDestination().get(0));
+        }
+        whiteTurn = !whiteTurn;
+        possibleAction();
     }
 
-    public Pawn[] getBlackPawns() {
-        return blackPawns;
-    }
+
 }

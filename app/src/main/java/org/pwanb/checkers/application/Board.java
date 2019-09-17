@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.support.v7.widget.AppCompatImageView;
+import android.util.Log;
 import android.widget.ImageView;
 import android.view.View;
 import android.graphics.drawable.Drawable;
@@ -29,6 +30,7 @@ class Board{
     private int drawWhite;
     private int drawBlack;
     private boolean isAlert;
+
 
     class Field implements AppCompatImageView.OnClickListener {
 
@@ -73,7 +75,9 @@ class Board{
 
         void deletePawn(){
             pawn = null;
-            image.setImageResource(PawnGraphics.EMPTY.get());
+            if (image != null){
+                image.setImageResource(PawnGraphics.EMPTY.get());
+            }
         }
 
         @Override
@@ -131,7 +135,7 @@ class Board{
                         end(Result.DRAW.output);
                     levelUp(board[position.getX()][position.getY()].pawn);
                     chosenField.unset();
-                    whiteTurn = !whiteTurn;
+                    changeTurn();
                     actionAI();
                     break;
                 }
@@ -196,7 +200,7 @@ class Board{
                             drawWhite = 0;
                         else
                             drawBlack = 0;
-                        whiteTurn = !whiteTurn;
+                        changeTurn();
                         deleteHighlightBoard();
                         actionAI();
                     }
@@ -280,6 +284,10 @@ class Board{
             y = highlight.getY();
             board[x][y].deleteHighlightField();
         }
+    }
+
+    void changeTurn() {
+        whiteTurn =! whiteTurn;
     }
 
     void start() {
@@ -659,7 +667,9 @@ class Board{
         int dstY = destination.getY();
         board[dstX][dstY].pawn = new Pawn(board[x][y].pawn);
         board[dstX][dstY].pawn.setCurrentPosition(destination);
-        board[dstX][dstY].image.setImageResource(PawnGraphics.get(whiteTurn, board[dstX][dstY].pawn.isKing()));
+        if (board[dstX][dstY].image != null) {
+            board[dstX][dstY].image.setImageResource(PawnGraphics.get(whiteTurn, board[dstX][dstY].pawn.isKing()));
+        }
         if(whiteTurn) {
             int idx = idxOfPawn(whitePawns, pawn.getCurrentPosition());
             whitePawns[idx].setCurrentPosition(destination);
@@ -839,7 +849,7 @@ class Board{
         } else{
             move(move.getPawn(), move.getDestination().get(0));
         }
-        whiteTurn = !whiteTurn;
+        changeTurn();
         possibleAction();
     }
 

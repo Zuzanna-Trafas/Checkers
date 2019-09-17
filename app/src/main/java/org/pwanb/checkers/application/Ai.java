@@ -1,5 +1,7 @@
 package org.pwanb.checkers.application;
 
+import android.util.Log;
+
 import java.util.LinkedList;
 
 class Ai {
@@ -24,6 +26,7 @@ class Ai {
             Pawn pawn = move.getPawn();
             LinkedList<Pair> destination = move.getDestination();
             tmpBoard.move(pawn, destination.get(0));
+            tmpBoard.changeTurn();
             DecisionTree firstLayer = new DecisionTree(tmpBoard, score(tmpBoard), move, null);
             LinkedList<Move> firstMoves = tmpBoard.allMoves(board.getWhitePawns());
             for (Move move1 : firstMoves) {
@@ -31,11 +34,19 @@ class Ai {
                 Pawn pawn1 = move1.getPawn();
                 LinkedList<Pair> destination1 = move1.getDestination();
                 tmpBoard1.move(pawn1, destination1.get(0));
+                tmpBoard1.changeTurn();
                 DecisionTree secondLayer = new DecisionTree(tmpBoard1, score(tmpBoard1), move1, null);
                 LinkedList<Move> secondMoves = tmpBoard1.allMoves(board.getBlackPawns());
                 for (Move move2 : secondMoves) {
                     Board tmpBoard2 = new Board(tmpBoard1);
                     Pawn pawn2 = move2.getPawn();
+                    Log.d("XDD", pawn.getCurrentPosition() + "");
+                    Log.d("XDD", pawn1.getCurrentPosition() + "");
+                    Log.d("XDD", pawn2.getCurrentPosition() + "");
+
+                    Log.d("XDD", allMoves + "");
+                    Log.d("XDD", firstMoves + "");
+                    Log.d("XDD", secondMoves + "");
                     LinkedList<Pair> destination2 = move2.getDestination();
                     tmpBoard2.move(pawn2, destination2.get(0));
                     secondLayer.setChild(new DecisionTree(tmpBoard2, score(tmpBoard2), move2, null));

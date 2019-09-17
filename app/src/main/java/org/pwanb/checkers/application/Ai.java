@@ -21,6 +21,7 @@ class Ai {
     public DecisionTree makeDecisionTree(Board board) {
         board.possibleAction();
         LinkedList<Move> allMoves = board.allMoves(board.getBlackPawns());
+        Log.d("ALLMOVE", allMoves + "-1");
         DecisionTree mainTree = new DecisionTree(board, score(board), null, null);
         for (Move move : allMoves) {
             Board tmpBoard =  new Board(board);
@@ -32,15 +33,18 @@ class Ai {
             } else {
                 tmpBoard.move(pawn, destination.get(0));
             }
-            tmpBoard.changeTurn();
             DecisionTree firstLayer = new DecisionTree(tmpBoard, score(tmpBoard), move, null);
+            tmpBoard.changeTurn();
             tmpBoard.possibleAction();
             LinkedList<Move> firstMoves = tmpBoard.allMoves(tmpBoard.getWhitePawns());
+            Log.d("ALLMOVE", allMoves + "-1");
+            Log.d("ALLMOVE", firstMoves + "-2");
             for (Move move1 : firstMoves) {
                 Board tmpBoard1 = new Board(tmpBoard);
-
+                tmpBoard1.possibleAction();
                 Pawn pawn1 = move1.getPawn();
                 LinkedList<Pair> destination1 = move1.getDestination();
+                Log.d("move1", destination1 + "");
                 if(destination1.size() > 1) {
                     tmpBoard1.attackAI(pawn1, destination1);
                 } else {
@@ -50,17 +54,29 @@ class Ai {
                 tmpBoard1.possibleAction();
                 DecisionTree secondLayer = new DecisionTree(tmpBoard1, score(tmpBoard1), move1, null);
                 LinkedList<Move> secondMoves = tmpBoard1.allMoves(tmpBoard1.getBlackPawns());
+                Log.d("ALLMOVE", allMoves + "-1");
+                Log.d("ALLMOVE", firstMoves + "-2");
+                Log.d("ALLMOVE", secondMoves + "-3");
                 for (Move move2 : secondMoves) {
                     Board tmpBoard2 = new Board(tmpBoard1);
+                    tmpBoard2.possibleAction();
                     Pawn pawn2 = move2.getPawn();
                     String checkBoard = "\n";
+                    LinkedList<Pair> destination2 = move2.getDestination();
+                    if(destination2.size() > 1) {
+                        tmpBoard2.attackAI(pawn2, destination2);
+                    } else {
+                        tmpBoard2.move(pawn2, destination2.get(0));
+                    }
+
+
                     for(int i = 7; i> -1; i--)
                     {
                         for(int j =0; j< 8; j++){
-                            if(tmpBoard1.board[j][i].pawn == null) {
+                            if(tmpBoard2.board[j][i].pawn == null) {
                                 checkBoard += " ";
                             }else {
-                                if (tmpBoard1.board[j][i].pawn.isWhite())
+                                if (tmpBoard2.board[j][i].pawn.isWhite())
                                     checkBoard += "B";
                                 else
                                     checkBoard +="C";
@@ -69,18 +85,6 @@ class Ai {
                         checkBoard +="\n";
                     }
                     Log.d("XDD", checkBoard);
-
-
-
-                    Log.d("XDD", allMoves + "");
-                    Log.d("XDD", firstMoves + "");
-                    Log.d("XDD", secondMoves + "");
-                    LinkedList<Pair> destination2 = move2.getDestination();
-                    if(destination2.size() > 1) {
-                        tmpBoard2.attackAI(pawn2, destination2);
-                    } else {
-                        tmpBoard2.move(pawn2, destination2.get(0));
-                    }
                     secondLayer.setChild(new DecisionTree(tmpBoard2, score(tmpBoard2), move2, null));
                 }
                 firstLayer.setChild(secondLayer);
@@ -98,16 +102,18 @@ class Ai {
         for (int i = 0 ; i < 12 ; i++) {
             if (color[i]!=null) {
                 count_color++;
+                if (color[i].isKing()) {
+                    count_color+=2;
+                }
             }
-            if (color[i].isKing()) {
-                count_color+=2;
-            }
+
             if (opponent[i]!=null) {
                 count_opponent++;
+                if (opponent[i].isKing()) {
+                    count_opponent += 2;
+                }
             }
-            if (opponent[i].isKing()) {
-                count_opponent += 2;
-            }
+
         }
         return count_color - count_opponent;
     }

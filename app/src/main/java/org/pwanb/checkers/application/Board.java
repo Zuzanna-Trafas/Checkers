@@ -25,7 +25,7 @@ class Board{
     private Activity activity;
     private Pawn[] whitePawns = new Pawn[12];
     private Pawn[] blackPawns = new Pawn[12];
-    private PriorityQueue<Pawn> attack = new PriorityQueue<>();
+    public PriorityQueue<Pawn> attack = new PriorityQueue<>();
     private Queue<Pair> highlights = new LinkedList<>();
     private int drawWhite;
     private int drawBlack;
@@ -260,10 +260,14 @@ class Board{
         }
         for(int i =0 ;i<12;i++)
         {
-            whitePawns[i]= new Pawn(oldBoard.whitePawns[i]);
-            blackPawns[i]= new Pawn(oldBoard.blackPawns[i]);
+            if(oldBoard.whitePawns[i] != null){
+                whitePawns[i]= new Pawn(oldBoard.whitePawns[i]);
+            }
+            if(oldBoard.blackPawns[i] != null){
+                blackPawns[i]= new Pawn(oldBoard.blackPawns[i]);
+            }
         }
-        attack = new PriorityQueue<>(oldBoard.attack);
+        attack = new PriorityQueue<>();
         highlights = new LinkedList<>();
     }
 
@@ -313,10 +317,12 @@ class Board{
     void possibleAction(){
         if(whiteTurn) {
             searchAttack(whitePawns);
-            if(attack.size() > 0)
+            if(attack.size() > 0){
                 showAttackOption();
-            else
+
+            } else {
                 searchMove(whitePawns);
+            }
         }
         else {
             searchAttack(blackPawns);
@@ -739,13 +745,61 @@ class Board{
         int x,y;
         Pair destination;
         listOfDestination.remove();
-        while (listOfDestination.size() > 1){
+        while (listOfDestination.size() > 0){
             destination = listOfDestination.poll();
-            x = (pawn.getCurrentPosition().getX() + destination.getX())/2;
-            y = (pawn.getCurrentPosition().getY() +  destination.getY())/2;
+            int destinationX = destination.getX();
+            int destinationY = destination.getY();
+            int currentX= pawn.getCurrentPosition().getX();
+            int currentY= pawn.getCurrentPosition().getY();
+            x = currentX;
+            y = currentY;
+            if(currentX < destinationX )
+                if (currentY < destinationY)
+                {
+                    while(x <7 && y < 7)
+                    {
+                        if (board[x][y].pawn != null && board[x][y].pawn.isWhite() != whiteTurn)
+                            break;
+                        x++;
+                        y++;
+                    }
+                }
+                else
+                {
+                    while(x <7 && y > 0)
+                    {
+                        if (board[x][y].pawn != null && board[x][y].pawn.isWhite() != whiteTurn)
+                            break;
+                        x++;
+                        y--;
+                    }
+                }
+            else
+            if (currentY < destinationY)
+            {
+                while(x > 0 && y < 7)
+                {
+                    if (board[x][y].pawn != null && board[x][y].pawn.isWhite() != whiteTurn)
+                        break;
+                    x--;
+                    y++;
+                }
+            }
+            else
+            {
+                while(x > 0 && y > 0)
+                {
+                    if (board[x][y].pawn != null && board[x][y].pawn.isWhite() != whiteTurn)
+                        break;
+                    x--;
+                    y--;
+                }
+            }
             move(pawn,destination);
+            pawn.setCurrentPosition(destination);
             delete(new Pair(x,y));
         }
+        attack.clear();
     }
 
     private void delete(Pair pawn){
@@ -849,7 +903,7 @@ class Board{
         if(move.getDestination().size() > 1){
             attackAI(move.getPawn(), move.getDestination());
         } else{
-            Log.d("XDDDDACTIONAIMOVE", move.toString());
+            Log.d("AIMOVE", move.toString());
             move(move.getPawn(), move.getDestination().get(0));
         }
         changeTurn();

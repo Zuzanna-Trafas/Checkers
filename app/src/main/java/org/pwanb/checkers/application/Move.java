@@ -17,7 +17,11 @@ class Move {
     }
 
     public LinkedList<Pair> getDestination() {
-        return destination;
+        LinkedList<Pair> newDestination = new LinkedList<>();
+        for(Pair pair : destination){
+            newDestination.add(new Pair(pair));
+        }
+        return newDestination;
     }
 
     @Override public String toString() {

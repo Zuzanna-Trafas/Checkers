@@ -23,6 +23,7 @@ class Ai {
         DecisionTree mainTree = new DecisionTree(board, score(board), null, null);
         for (Move move : allMoves) {
             Board tmpBoard =  new Board(board);
+            tmpBoard.possibleAction();
             Pawn pawn = move.getPawn();
             LinkedList<Pair> destination = move.getDestination();
             if(destination.size() > 1) {
@@ -35,6 +36,7 @@ class Ai {
             LinkedList<Move> firstMoves = tmpBoard.allMoves(tmpBoard.getWhitePawns());
             for (Move move1 : firstMoves) {
                 Board tmpBoard1 = new Board(tmpBoard);
+                tmpBoard1.possibleAction();
                 Pawn pawn1 = move1.getPawn();
                 LinkedList<Pair> destination1 = move1.getDestination();
                 if(destination1.size() > 1) {
@@ -47,8 +49,9 @@ class Ai {
                 LinkedList<Move> secondMoves = tmpBoard1.allMoves(tmpBoard1.getBlackPawns());
                 for (Move move2 : secondMoves) {
                     Board tmpBoard2 = new Board(tmpBoard1);
+                    tmpBoard2.possibleAction();
                     Pawn pawn2 = move2.getPawn();
-                    String checkBoard = "";
+                    String checkBoard = "\n";
                     for(int i = 7; i> -1; i--)
                     {
                         for(int j =0; j< 8; j++){

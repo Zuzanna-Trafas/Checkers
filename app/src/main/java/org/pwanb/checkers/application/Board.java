@@ -310,7 +310,7 @@ class Board{
         possibleAction();
     }
 
-    private void possibleAction(){
+    void possibleAction(){
         if(whiteTurn) {
             searchAttack(whitePawns);
             if(attack.size() > 0)
@@ -656,7 +656,9 @@ class Board{
         for (Pawn pawn : attack) {
             x = pawn.getCurrentPosition().getX();
             y = pawn.getCurrentPosition().getY();
-            board[x][y].setHighlightRed();
+            if(board[x][y].image != null) {
+                board[x][y].setHighlightRed();
+            }
         }
     }
 
@@ -676,8 +678,6 @@ class Board{
         }else{
             int idx = idxOfPawn(blackPawns, pawn.getCurrentPosition());
             blackPawns[idx].setCurrentPosition(destination);
-            Log.d("XDDD", blackPawns[idx] + " "+ destination);
-
         }
         deleteHighlightBoard();
         board[x][y].deletePawn();
@@ -849,6 +849,7 @@ class Board{
         if(move.getDestination().size() > 1){
             attackAI(move.getPawn(), move.getDestination());
         } else{
+            Log.d("XDDDDACTIONAIMOVE", move.toString());
             move(move.getPawn(), move.getDestination().get(0));
         }
         changeTurn();

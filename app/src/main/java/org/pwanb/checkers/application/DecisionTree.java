@@ -17,7 +17,7 @@ public class DecisionTree {
         if (children != null){
             this.children = new ArrayList<>(Arrays.asList(children));
         }else
-            this.children = null;
+            this.children = new ArrayList<>();
 
         this.move = move;
     }

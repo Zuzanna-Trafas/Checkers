@@ -40,6 +40,10 @@ class Pawn implements Comparable<Pawn>{
         }
         return ((Pawn) o).currentPosition.equals(currentPosition);
     }
+    @Override
+    public String toString(){
+        return "Pawn: " + currentPosition.getX() + " " + currentPosition.getY() + " ";
+    }
 
     Pair getCurrentPosition() { return currentPosition; }
 

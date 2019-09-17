@@ -32,7 +32,7 @@ class Ai {
             }
             tmpBoard.changeTurn();
             DecisionTree firstLayer = new DecisionTree(tmpBoard, score(tmpBoard), move, null);
-            LinkedList<Move> firstMoves = tmpBoard.allMoves(board.getWhitePawns());
+            LinkedList<Move> firstMoves = tmpBoard.allMoves(tmpBoard.getWhitePawns());
             for (Move move1 : firstMoves) {
                 Board tmpBoard1 = new Board(tmpBoard);
                 Pawn pawn1 = move1.getPawn();
@@ -44,13 +44,28 @@ class Ai {
                 }
                 tmpBoard1.changeTurn();
                 DecisionTree secondLayer = new DecisionTree(tmpBoard1, score(tmpBoard1), move1, null);
-                LinkedList<Move> secondMoves = tmpBoard1.allMoves(board.getBlackPawns());
+                LinkedList<Move> secondMoves = tmpBoard1.allMoves(tmpBoard1.getBlackPawns());
                 for (Move move2 : secondMoves) {
                     Board tmpBoard2 = new Board(tmpBoard1);
                     Pawn pawn2 = move2.getPawn();
-                    Log.d("XDD", pawn.getCurrentPosition() + "");
-                    Log.d("XDD", pawn1.getCurrentPosition() + "");
-                    Log.d("XDD", pawn2.getCurrentPosition() + "");
+                    String checkBoard = "";
+                    for(int i = 7; i> -1; i--)
+                    {
+                        for(int j =0; j< 8; j++){
+                            if(tmpBoard1.board[j][i].pawn == null) {
+                                checkBoard += " ";
+                            }else {
+                                if (tmpBoard1.board[j][i].pawn.isWhite())
+                                    checkBoard += "B";
+                                else
+                                    checkBoard +="C";
+                            }
+                        }
+                        checkBoard +="\n";
+                    }
+                    Log.d("XDD", checkBoard);
+
+
 
                     Log.d("XDD", allMoves + "");
                     Log.d("XDD", firstMoves + "");

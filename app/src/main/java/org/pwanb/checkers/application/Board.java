@@ -21,7 +21,7 @@ import java.util.Queue;
 class Board{
     private boolean whiteTurn;
     private Pair chosenField;
-    private Field[][] board = new Field[8][8];
+    public Field[][] board = new Field[8][8];
     private Activity activity;
     private Pawn[] whitePawns = new Pawn[12];
     private Pawn[] blackPawns = new Pawn[12];
@@ -36,7 +36,7 @@ class Board{
 
         private ImageView image;
         private Pair position;
-        private Pawn pawn = null;
+        public Pawn pawn = null;
 
         Field(int x, int y, ImageView img) {
             position = new Pair(x,y);
@@ -676,6 +676,8 @@ class Board{
         }else{
             int idx = idxOfPawn(blackPawns, pawn.getCurrentPosition());
             blackPawns[idx].setCurrentPosition(destination);
+            Log.d("XDDD", blackPawns[idx] + " "+ destination);
+
         }
         deleteHighlightBoard();
         board[x][y].deletePawn();

@@ -13,7 +13,7 @@ class Move {
     }
 
     public Pawn getPawn() {
-        return pawn;
+        return new Pawn(pawn);
     }
 
     public LinkedList<Pair> getDestination() {

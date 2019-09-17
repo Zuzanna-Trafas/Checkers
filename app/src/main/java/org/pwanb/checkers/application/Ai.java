@@ -44,7 +44,6 @@ class Ai {
                 tmpBoard1.possibleAction();
                 Pawn pawn1 = move1.getPawn();
                 LinkedList<Pair> destination1 = move1.getDestination();
-                Log.d("move1", destination1 + "");
                 if(destination1.size() > 1) {
                     tmpBoard1.attackAI(pawn1, destination1);
                 } else {

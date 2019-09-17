@@ -133,7 +133,6 @@ class Board{
                             drawBlack++;
                     if (drawBlack > 14 && drawWhite > 14)
                         end(Result.DRAW.output);
-                    levelUp(board[position.getX()][position.getY()].pawn);
                     chosenField.unset();
                     changeTurn();
                     actionAI();
@@ -673,6 +672,7 @@ class Board{
         int y = pawn.getCurrentPosition().getY();
         int dstX = destination.getX();
         int dstY = destination.getY();
+        Log.d("ERROR", board[x][y].pawn + "");
         board[dstX][dstY].pawn = new Pawn(board[x][y].pawn);
         board[dstX][dstY].pawn.setCurrentPosition(destination);
         if (board[dstX][dstY].image != null) {
@@ -687,6 +687,7 @@ class Board{
         }
         deleteHighlightBoard();
         board[x][y].deletePawn();
+        levelUp(board[dstX][dstY].pawn);
     }
 
     private void attack(Pawn pawn, Pair destination){
@@ -800,6 +801,7 @@ class Board{
             delete(new Pair(x,y));
         }
         attack.clear();
+        levelUp(pawn);
     }
 
     private void delete(Pair pawn){
@@ -827,7 +829,9 @@ class Board{
                 int idx = idxOfPawn(blackPawns, pawn.getCurrentPosition());
                 blackPawns[idx].setKing();
             }
-            board[X][Y].image.setImageResource(PawnGraphics.get(whiteTurn, board[X][Y].pawn.isKing()));
+            if(board[X][Y].image != null) {
+                board[X][Y].image.setImageResource(PawnGraphics.get(whiteTurn, board[X][Y].pawn.isKing()));
+            }
         }
 
     }

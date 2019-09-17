@@ -9,22 +9,21 @@ class Ai {
     private Move move;
 
     Ai(Board board){
-        Board copyBoard = new Board(board);
+        Board copyBoard = new Board(board, true);
         decisionTree = makeDecisionTree(copyBoard);
         move = selectMove(decisionTree);
     }
 
-    public Move getMove() {
+     Move getMove() {
         return move;
     }
 
-    public DecisionTree makeDecisionTree(Board board) {
+    private DecisionTree makeDecisionTree(Board board) {
         board.possibleAction();
         LinkedList<Move> allMoves = board.allMoves(board.getBlackPawns());
-        Log.d("ALLMOVE", allMoves + "-1");
         DecisionTree mainTree = new DecisionTree(board, score(board), null, null);
         for (Move move : allMoves) {
-            Board tmpBoard =  new Board(board);
+            Board tmpBoard =  new Board(board, true);
             tmpBoard.possibleAction();
             Pawn pawn = move.getPawn();
             LinkedList<Pair> destination = move.getDestination();
@@ -37,10 +36,8 @@ class Ai {
             tmpBoard.changeTurn();
             tmpBoard.possibleAction();
             LinkedList<Move> firstMoves = tmpBoard.allMoves(tmpBoard.getWhitePawns());
-            Log.d("ALLMOVE", allMoves + "-1");
-            Log.d("ALLMOVE", firstMoves + "-2");
             for (Move move1 : firstMoves) {
-                Board tmpBoard1 = new Board(tmpBoard);
+                Board tmpBoard1 = new Board(tmpBoard, true);
                 tmpBoard1.possibleAction();
                 Pawn pawn1 = move1.getPawn();
                 LinkedList<Pair> destination1 = move1.getDestination();
@@ -53,14 +50,10 @@ class Ai {
                 tmpBoard1.possibleAction();
                 DecisionTree secondLayer = new DecisionTree(tmpBoard1, score(tmpBoard1), move1, null);
                 LinkedList<Move> secondMoves = tmpBoard1.allMoves(tmpBoard1.getBlackPawns());
-                Log.d("ALLMOVE", allMoves + "-1");
-                Log.d("ALLMOVE", firstMoves + "-2");
-                Log.d("ALLMOVE", secondMoves + "-3");
                 for (Move move2 : secondMoves) {
-                    Board tmpBoard2 = new Board(tmpBoard1);
+                    Board tmpBoard2 = new Board(tmpBoard1, true);
                     tmpBoard2.possibleAction();
                     Pawn pawn2 = move2.getPawn();
-                    String checkBoard = "\n";
                     LinkedList<Pair> destination2 = move2.getDestination();
                     if(destination2.size() > 1) {
                         tmpBoard2.attackAI(pawn2, destination2);
@@ -68,22 +61,6 @@ class Ai {
                         tmpBoard2.move(pawn2, destination2.get(0));
                     }
 
-
-                    for(int i = 7; i> -1; i--)
-                    {
-                        for(int j =0; j< 8; j++){
-                            if(tmpBoard2.board[j][i].pawn == null) {
-                                checkBoard += " ";
-                            }else {
-                                if (tmpBoard2.board[j][i].pawn.isWhite())
-                                    checkBoard += "B";
-                                else
-                                    checkBoard +="C";
-                            }
-                        }
-                        checkBoard +="\n";
-                    }
-                    Log.d("XDD", checkBoard);
                     secondLayer.setChild(new DecisionTree(tmpBoard2, score(tmpBoard2), move2, null));
                 }
                 firstLayer.setChild(secondLayer);
@@ -117,7 +94,7 @@ class Ai {
         return count_color - count_opponent;
     }
 
-    public Move selectMove(DecisionTree decisionTree) {
+    private Move selectMove(DecisionTree decisionTree) {
         int max = -20;
         Move selectedMove = null;
         for (DecisionTree child : decisionTree.getChildren()) {

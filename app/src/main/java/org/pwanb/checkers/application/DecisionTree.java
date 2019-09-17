@@ -1,6 +1,5 @@
 package org.pwanb.checkers.application;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -11,7 +10,7 @@ public class DecisionTree {
     private ArrayList<DecisionTree> children;
     private Move move;
 
-    public DecisionTree(Board board, int score, Move move, DecisionTree... children) {
+    DecisionTree(Board board, int score, Move move, DecisionTree... children) {
         this.board = board;
         this.score = score;
         if (children != null){
@@ -30,15 +29,15 @@ public class DecisionTree {
         return move;
     }
 
-    public int getScore() {
+    int getScore() {
         return score;
     }
 
-    public List<DecisionTree> getChildren() {
+    List<DecisionTree> getChildren() {
         return children;
     }
 
-    public void setScore(int newValue) {
+    void setScore(int newValue) {
         score = newValue;
     }
 
@@ -48,7 +47,7 @@ public class DecisionTree {
         }
     }
 
-    public void setChild(DecisionTree child) {
+    void setChild(DecisionTree child) {
         children.add(child);
     }
 

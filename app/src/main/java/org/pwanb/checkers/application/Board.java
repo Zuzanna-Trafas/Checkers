@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.support.v7.widget.AppCompatImageView;
-import android.util.Log;
 import android.widget.ImageView;
 import android.view.View;
 import android.graphics.drawable.Drawable;
@@ -21,22 +20,23 @@ import java.util.Queue;
 class Board{
     private boolean whiteTurn;
     private Pair chosenField;
-    public Field[][] board = new Field[8][8];
+    private Field[][] board = new Field[8][8];
     private Activity activity;
     private Pawn[] whitePawns = new Pawn[12];
     private Pawn[] blackPawns = new Pawn[12];
-    public PriorityQueue<Pawn> attack = new PriorityQueue<>();
+    private PriorityQueue<Pawn> attack = new PriorityQueue<>();
     private Queue<Pair> highlights = new LinkedList<>();
     private int drawWhite;
     private int drawBlack;
     private boolean isAlert;
+    private boolean isCopy;
 
 
     class Field implements AppCompatImageView.OnClickListener {
 
         private ImageView image;
         private Pair position;
-        public Pawn pawn = null;
+        private Pawn pawn = null;
 
         Field(int x, int y, ImageView img) {
             position = new Pair(x,y);
@@ -235,6 +235,8 @@ class Board{
 
 
     Board(ImageView[][] boardMain, Activity activity) {
+        isCopy = false;
+        isAlert = false;
         chosenField = new Pair();
         this.activity = activity;
         drawWhite = 0;
@@ -245,12 +247,13 @@ class Board{
             }
         }
     }
-    Board(Board oldBoard) {
+    Board(Board oldBoard, boolean isCopy) {
         whiteTurn = oldBoard.whiteTurn;
         chosenField = new Pair();
         drawWhite = 0;
         drawBlack = 0;
         isAlert = oldBoard.isAlert;
+        this.isCopy = isCopy;
         this.activity = oldBoard.activity;
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
@@ -667,12 +670,11 @@ class Board{
         }
     }
 
-    public void move(Pawn pawn, Pair destination){
+    void move(Pawn pawn, Pair destination){
         int x = pawn.getCurrentPosition().getX();
         int y = pawn.getCurrentPosition().getY();
         int dstX = destination.getX();
         int dstY = destination.getY();
-        Log.d("ERROR", board[x][y].pawn + "");
         board[dstX][dstY].pawn = new Pawn(board[x][y].pawn);
         board[dstX][dstY].pawn.setCurrentPosition(destination);
         if (board[dstX][dstY].image != null) {
@@ -742,7 +744,7 @@ class Board{
         delete(new Pair(x,y));
     }
 
-    public void attackAI(Pawn pawn, LinkedList<Pair> listOfDestination){
+    void attackAI(Pawn pawn, LinkedList<Pair> listOfDestination){
         int x,y;
         Pair destination;
         listOfDestination.remove();
@@ -847,7 +849,7 @@ class Board{
     }
 
     private void end(String output) {
-        if (!isAlert) {
+        if (!isAlert && !isCopy) {
             isAlert = true;
             AlertDialog.Builder builder = new AlertDialog.Builder(activity);
             builder.setTitle("THE END");
@@ -900,14 +902,13 @@ class Board{
         return allMoves;
     }
 
-    void actionAI(){
+    private void actionAI(){
         possibleAction();
         Ai computer = new Ai(this);
         Move move = computer.getMove();
         if(move.getDestination().size() > 1){
             attackAI(move.getPawn(), move.getDestination());
         } else{
-            Log.d("AIMOVE", move.toString());
             move(move.getPawn(), move.getDestination().get(0));
         }
         changeTurn();

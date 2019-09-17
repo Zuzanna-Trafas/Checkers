@@ -12,11 +12,11 @@ class Move {
         this.destination = destination;
     }
 
-    public Pawn getPawn() {
+    Pawn getPawn() {
         return new Pawn(pawn);
     }
 
-    public LinkedList<Pair> getDestination() {
+    LinkedList<Pair> getDestination() {
         LinkedList<Pair> newDestination = new LinkedList<>();
         for(Pair pair : destination){
             newDestination.add(new Pair(pair));

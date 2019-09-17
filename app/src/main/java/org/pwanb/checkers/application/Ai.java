@@ -19,6 +19,7 @@ class Ai {
     }
 
     public DecisionTree makeDecisionTree(Board board) {
+        board.possibleAction();
         LinkedList<Move> allMoves = board.allMoves(board.getBlackPawns());
         DecisionTree mainTree = new DecisionTree(board, score(board), null, null);
         for (Move move : allMoves) {
@@ -33,10 +34,11 @@ class Ai {
             }
             tmpBoard.changeTurn();
             DecisionTree firstLayer = new DecisionTree(tmpBoard, score(tmpBoard), move, null);
+            tmpBoard.possibleAction();
             LinkedList<Move> firstMoves = tmpBoard.allMoves(tmpBoard.getWhitePawns());
             for (Move move1 : firstMoves) {
                 Board tmpBoard1 = new Board(tmpBoard);
-                tmpBoard1.possibleAction();
+
                 Pawn pawn1 = move1.getPawn();
                 LinkedList<Pair> destination1 = move1.getDestination();
                 if(destination1.size() > 1) {
@@ -45,11 +47,11 @@ class Ai {
                     tmpBoard1.move(pawn1, destination1.get(0));
                 }
                 tmpBoard1.changeTurn();
+                tmpBoard1.possibleAction();
                 DecisionTree secondLayer = new DecisionTree(tmpBoard1, score(tmpBoard1), move1, null);
                 LinkedList<Move> secondMoves = tmpBoard1.allMoves(tmpBoard1.getBlackPawns());
                 for (Move move2 : secondMoves) {
                     Board tmpBoard2 = new Board(tmpBoard1);
-                    tmpBoard2.possibleAction();
                     Pawn pawn2 = move2.getPawn();
                     String checkBoard = "\n";
                     for(int i = 7; i> -1; i--)

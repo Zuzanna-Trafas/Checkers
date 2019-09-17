@@ -733,7 +733,7 @@ class Board{
         delete(new Pair(x,y));
     }
 
-    private void attackAI(Pawn pawn, LinkedList<Pair> listOfDestination){
+    public void attackAI(Pawn pawn, LinkedList<Pair> listOfDestination){
         int x,y;
         Pair destination;
         listOfDestination.remove();

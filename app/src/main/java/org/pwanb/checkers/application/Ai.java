@@ -25,7 +25,11 @@ class Ai {
             Board tmpBoard =  new Board(board);
             Pawn pawn = move.getPawn();
             LinkedList<Pair> destination = move.getDestination();
-            tmpBoard.move(pawn, destination.get(0));
+            if(destination.size() > 1) {
+                tmpBoard.attackAI(pawn, destination);
+            } else {
+                tmpBoard.move(pawn, destination.get(0));
+            }
             tmpBoard.changeTurn();
             DecisionTree firstLayer = new DecisionTree(tmpBoard, score(tmpBoard), move, null);
             LinkedList<Move> firstMoves = tmpBoard.allMoves(board.getWhitePawns());
@@ -33,7 +37,11 @@ class Ai {
                 Board tmpBoard1 = new Board(tmpBoard);
                 Pawn pawn1 = move1.getPawn();
                 LinkedList<Pair> destination1 = move1.getDestination();
-                tmpBoard1.move(pawn1, destination1.get(0));
+                if(destination1.size() > 1) {
+                    tmpBoard1.attackAI(pawn1, destination1);
+                } else {
+                    tmpBoard1.move(pawn1, destination1.get(0));
+                }
                 tmpBoard1.changeTurn();
                 DecisionTree secondLayer = new DecisionTree(tmpBoard1, score(tmpBoard1), move1, null);
                 LinkedList<Move> secondMoves = tmpBoard1.allMoves(board.getBlackPawns());
@@ -48,7 +56,11 @@ class Ai {
                     Log.d("XDD", firstMoves + "");
                     Log.d("XDD", secondMoves + "");
                     LinkedList<Pair> destination2 = move2.getDestination();
-                    tmpBoard2.move(pawn2, destination2.get(0));
+                    if(destination2.size() > 1) {
+                        tmpBoard2.attackAI(pawn2, destination2);
+                    } else {
+                        tmpBoard2.move(pawn2, destination2.get(0));
+                    }
                     secondLayer.setChild(new DecisionTree(tmpBoard2, score(tmpBoard2), move2, null));
                 }
                 firstLayer.setChild(secondLayer);
